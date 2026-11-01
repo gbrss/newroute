@@ -1,0 +1,12 @@
+name = "newroute-landing-astro"
+compatibility_date = "2026-10-31"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "./dist"
+
+[vars]
+PUBLIC_COMPANY_PHONE = "+56 2 2394 2153"
+PUBLIC_WHATSAPP = "+56 9 8412 8890"
+PUBLIC_EMAIL = "contacto@newroute.cl"
+PUBLIC_ADDRESS = "Ahumada 236, Oficina 510, Santiago Centro"

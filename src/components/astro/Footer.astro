@@ -1,0 +1,104 @@
+---
+// src/components/astro/Footer.astro
+// Componente 100% Astro puro con botón de engranaje a gerencia
+import { COMPANY_INFO } from '../../data/newrouteData';
+---
+
+<footer class="bg-stone-950 text-stone-400 border-t border-stone-800 text-xs">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+      <!-- Brand & History -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-amber-500 text-stone-950 flex items-center justify-center font-bold">
+            🧭
+          </div>
+          <div>
+            <span class="text-lg font-bold font-display text-white tracking-tight">
+              NEW ROUTE CHILE
+            </span>
+            <p class="text-[11px] text-stone-500 font-medium">
+              Transporte de Pasajeros & Turismo Receptivo
+            </p>
+          </div>
+        </div>
+
+        <p class="text-stone-400 text-xs leading-relaxed max-w-sm">
+          Fundada en 2006. Casi dos décadas entregando soluciones de transporte privado, convenios hoteleros, excursiones a valles vitivinícolas y centros de esquí con los más altos estándares de calidad y seguridad.
+        </p>
+
+        <div class="pt-2 flex items-center gap-3">
+          <a
+            href="/servicios"
+            class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors cursor-pointer"
+          >
+            Solicitar Reserva 24/7
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="lg:col-span-4 space-y-3">
+        <div class="text-xs font-bold text-white uppercase tracking-wider">
+          Datos de Contacto Central
+        </div>
+
+        <ul class="space-y-2.5 text-stone-300 text-xs">
+          <li class="flex items-start gap-2.5">
+            <span>📍</span>
+            <span>{COMPANY_INFO.address}</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <span>📞</span>
+            <a href={`tel:${COMPANY_INFO.phoneRaw}`} class="hover:text-amber-400">
+              {COMPANY_INFO.phone}
+            </a>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <span>📧</span>
+            <a href={`mailto:${COMPANY_INFO.email}`} class="hover:text-amber-400">
+              {COMPANY_INFO.email}
+            </a>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <span>🕒</span>
+            <span>{COMPANY_INFO.schedule}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Pages & Navigation Links -->
+      <div class="lg:col-span-3 space-y-3">
+        <div class="text-xs font-bold text-white uppercase tracking-wider">
+          Páginas del Sitio
+        </div>
+        <ul class="space-y-2 text-xs text-stone-400">
+          <li><a href="/" class="hover:text-amber-400 transition-colors">Página de Inicio</a></li>
+          <li><a href="/empresa" class="hover:text-amber-400 transition-colors">Nuestra Empresa (Historia 2006 & Flota)</a></li>
+          <li><a href="/servicios" class="hover:text-amber-400 transition-colors">Servicios & Tarifas Oficiales 2026</a></li>
+          <li><a href="/#testimonios" class="hover:text-amber-400 transition-colors">Testimonios & Reseñas</a></li>
+          <li><a href="/#contacto" class="hover:text-amber-400 transition-colors">Contacto & Ubicación</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Micro Copyright with Gear Icon to Gerencia -->
+    <div class="mt-12 pt-6 border-t border-stone-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-500 text-[11px]">
+      <div>
+        © 2006–2026 New Route Chile SpA. Todos los derechos reservados.
+      </div>
+      <div className="flex items-center gap-4">
+        <a href="#top" class="hover:text-stone-300">Subir al Inicio ↑</a>
+        <span class="text-stone-800">·</span>
+        <a
+          href="/gerencia"
+          class="flex items-center gap-1.5 text-stone-500 hover:text-amber-400 transition-colors group"
+          title="Portal de Acceso a Gerencia & Operaciones"
+        >
+          <span class="group-hover:rotate-45 transition-transform inline-block">⚙️</span>
+          <span>Acceso Gerencia</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

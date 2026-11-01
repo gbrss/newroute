@@ -1,0 +1,142 @@
+---
+// src/components/astro/ServicesAndRates.astro
+// Componente 100% Astro puro con filtrado nativo en vanilla JS
+import { SERVICES_TARIFFS } from '../../data/newrouteData';
+import { formatCLP } from '../../lib/storage';
+
+const categories = [
+  { id: 'todos', label: 'Todos los Servicios' },
+  { id: 'aeropuerto', label: 'Aeropuerto SCL' },
+  { id: 'vinos', label: 'Rutas del Vino' },
+  { id: 'ski', label: 'Centros de Ski' },
+  { id: 'termas', label: 'Termas & Cordillera' },
+  { id: 'city_tour', label: 'City Tours & Regiones' },
+];
+---
+
+<section id="servicios" class="py-20 lg:py-28 bg-stone-100/70 border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase text-amber-700 mb-2">
+        <span>✨ Tarifario Oficial 2026</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold font-display text-stone-900 tracking-tight">
+        Servicios Turísticos & Tarifas de Traslado
+      </h2>
+      <p class="text-sm sm:text-base text-stone-600 mt-3 font-light">
+        Valores oficiales en pesos chilenos (CLP) para vehículos ejecutivos. Sin cargos sorpresa ni tarifas dinámicas ocultas.
+      </p>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mt-8 p-1.5 bg-stone-200/80 rounded-xl max-w-2xl mx-auto">
+        {categories.map((cat, i) => (
+          <button
+            type="button"
+            data-cat={cat.id}
+            class:list={[
+              "filter-btn px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer",
+              i === 0 ? "bg-stone-900 text-white shadow-sm" : "text-stone-700 hover:text-stone-950 hover:bg-stone-200"
+            ]}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {SERVICES_TARIFFS.map((item) => (
+        <div
+          data-category={item.category}
+          class="service-card bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+        >
+          <div class="relative h-48 overflow-hidden bg-stone-900">
+            <img
+              src={item.image}
+              alt={item.name}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent"></div>
+            <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
+              <span class="flex items-center gap-1 font-medium bg-stone-900/80 px-2 py-0.5 rounded backdrop-blur-sm">
+                ⏱ {item.durationApprox}
+              </span>
+              {item.featured && (
+                <span class="bg-amber-500 text-stone-950 font-bold px-2 py-0.5 rounded text-[11px]">
+                  Más Solicitado
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-lg font-bold font-display text-stone-900 leading-snug">
+              {item.name}
+            </h3>
+            <p class="text-xs text-amber-800 font-medium mt-1">
+              {item.subtitle}
+            </p>
+            <p class="text-xs text-stone-600 mt-2.5 line-clamp-3 leading-relaxed">
+              {item.description}
+            </p>
+
+            <div class="bg-stone-50 rounded-xl p-3.5 border border-stone-200 my-4">
+              <div class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider mb-2">
+                Tarifa Oficial (CLP)
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs font-display">
+                <div class="bg-white p-2 rounded border border-stone-200">
+                  <span class="text-stone-500 text-[10px] block">1 a 3 PAX</span>
+                  <strong class="text-sm font-bold text-stone-900">{formatCLP(item.price1to3)}</strong>
+                </div>
+                <div class="bg-white p-2 rounded border border-stone-200">
+                  <span class="text-stone-500 text-[10px] block">4 a 6 PAX</span>
+                  <strong class="text-sm font-bold text-amber-700">{formatCLP(item.price4to6)}</strong>
+                </div>
+              </div>
+            </div>
+
+            <a
+              href={`https://wa.me/56984128890?text=${encodeURIComponent(`Hola New Route Chile, deseo cotizar y reservar el servicio: ${item.name}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full py-2.5 px-4 rounded-lg bg-stone-900 hover:bg-amber-500 hover:text-stone-950 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm text-center"
+            >
+              <span>Reservar Este Servicio &rarr;</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Script vanilla empaquetado por Astro
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.service-card');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-cat');
+      
+      buttons.forEach((b) => {
+        b.classList.remove('bg-stone-900', 'text-white', 'shadow-sm');
+        b.classList.add('text-stone-700', 'hover:text-stone-950', 'hover:bg-stone-200');
+      });
+      btn.classList.add('bg-stone-900', 'text-white', 'shadow-sm');
+      btn.classList.remove('text-stone-700', 'hover:text-stone-950', 'hover:bg-stone-200');
+
+      cards.forEach((card) => {
+        const cardCat = card.getAttribute('data-category');
+        if (cat === 'todos' || cardCat === cat) {
+          (card as HTMLElement).style.display = 'flex';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

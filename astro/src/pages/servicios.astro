@@ -1,0 +1,32 @@
+---
+// /astro/src/pages/servicios.astro (Página Individual de Servicios & Tarifas)
+import Layout from '../layouts/Layout.astro';
+import { ServicesAndRates } from '../../src/components/ServicesAndRates';
+import { SERVICES_TARIFFS } from '../../src/data/newrouteData';
+import { FloatingWhatsApp } from '../../src/components/FloatingWhatsApp';
+---
+
+<Layout
+  title="Servicios & Tarifas Oficiales 2026 | New Route Chile"
+  description="Tarifario oficial en pesos chilenos para traslados aeropuerto SCL, rutas del vino, centros de esquí y turismo privado."
+>
+  <!-- Breadcrumb & Header -->
+  <header class="bg-stone-900 text-white py-14 border-b border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-xs text-stone-400 mb-3">
+        <a href="/" class="hover:text-white">Inicio</a>
+        <span class="mx-2 text-stone-600">/</span>
+        <span class="text-amber-400">Servicios & Tarifas</span>
+      </nav>
+      <h1 class="text-4xl sm:text-5xl font-bold font-display text-white">Servicios & Tarifario Oficial</h1>
+      <p class="text-stone-300 mt-2 max-w-2xl font-light">
+        Tarifas fijas transparentes para 1-3 PAX y 4-6 PAX en vehículos ejecutivos climatizados.
+      </p>
+    </div>
+  </header>
+
+  <!-- Catálogo y Calculadora de Tarifas en Isla React -->
+  <ServicesAndRates client:load tariffs={SERVICES_TARIFFS} onSelectServiceToBook={() => {}} />
+
+  <FloatingWhatsApp client:idle />
+</Layout>

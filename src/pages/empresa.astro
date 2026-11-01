@@ -1,0 +1,34 @@
+---
+// src/pages/empresa.astro
+// Página individual 100% en componentes Astro
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/astro/Navbar.astro';
+import CompanyHistory from '../components/astro/CompanyHistory.astro';
+import FleetSection from '../components/astro/FleetSection.astro';
+import Footer from '../components/astro/Footer.astro';
+---
+
+<Layout
+  title="Nuestra Empresa | New Route Chile · Traslados y Turismo desde 2006"
+  description="Fundada en 2006 por profesionales de hotelería y turismo. Conoce la historia, flota ejecutiva y convenios de New Route Chile."
+>
+  <Navbar currentPage="empresa" />
+
+  <header class="bg-stone-900 text-white py-14 border-b border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-xs text-stone-400 mb-3">
+        <a href="/" class="hover:text-white">Inicio</a>
+        <span class="mx-2 text-stone-600">/</span>
+        <span class="text-amber-400">Nuestra Empresa</span>
+      </nav>
+      <h1 class="text-4xl sm:text-5xl font-bold font-display text-white">Nuestra Empresa & Trayectoria</h1>
+      <p class="text-stone-300 mt-2 max-w-2xl font-light">
+        Más de 18 años entregando soluciones de transporte privado continuo 24/7 con los más altos estándares hoteleros.
+      </p>
+    </div>
+  </header>
+
+  <CompanyHistory />
+  <FleetSection />
+  <Footer />
+</Layout>

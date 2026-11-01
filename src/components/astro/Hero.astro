@@ -1,0 +1,66 @@
+---
+// src/components/astro/Hero.astro
+// Componente 100% Astro puro con fotografía y cotizador directo
+import { IMAGES } from '../../data/newrouteData';
+
+const stats = [
+  { label: 'Servicio Continuo', value: '24/7' },
+  { label: 'Años de Experiencia', value: '+18' },
+  { label: 'Conductores de Turismo', value: '+20' },
+  { label: 'Convenio Hoteles', value: '5 Estrellas' },
+];
+---
+
+<section id="inicio" class="relative min-h-[640px] lg:min-h-[720px] flex items-center bg-stone-950 text-white overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img
+      src={IMAGES.hero}
+      alt="Transporte ejecutivo New Route Chile"
+      class="w-full h-full object-cover object-center filter brightness-[0.45]"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-stone-950/70"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-950/60 to-transparent"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
+    <div class="max-w-3xl space-y-6">
+      <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span>Fundada en 2006 · Santiago de Chile · 18+ Años de Excelencia</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.08] text-white">
+        Transporte Privado de Alta Gama & <span class="text-amber-400">Turismo Receptivo 24/7</span>
+      </h1>
+
+      <p class="text-lg sm:text-xl text-stone-300 max-w-2xl leading-relaxed font-light">
+        Conexión directa entre el Aeropuerto SCL, hoteles de lujo, viñas de prestigio y los Andes chilenos. Conductores profesionales formados en alta hotelería y flota ejecutiva de máximo estándar.
+      </p>
+
+      <div class="pt-4 flex flex-wrap items-center gap-4">
+        <a
+          href="/servicios"
+          class="px-6 py-3.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-colors"
+        >
+          Ver Tarifas Oficiales 2026
+        </a>
+        <a
+          href="/empresa"
+          class="px-6 py-3.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 font-medium text-sm border border-stone-700 transition-colors"
+        >
+          Conocer Nuestra Empresa
+        </a>
+      </div>
+
+      <div class="pt-8 border-t border-stone-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-stone-400">
+        {stats.map((s) => (
+          <div>
+            <div class="text-lg font-bold text-white font-display">{s.value}</div>
+            <div class="text-[11px] text-stone-400">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,6 @@
+{
+  "name": "New Route Chile - Traslados & Turismo Privado",
+  "description": "Plataforma oficial de New Route Chile: traslados aeropuerto 24/7, rutas del vino, centros de esquí y tours privados en Santiago y regiones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

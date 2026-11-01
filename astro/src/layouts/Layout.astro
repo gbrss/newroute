@@ -1,0 +1,80 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title = "New Route Chile | Traslados Privados, Aeropuerto y Turismo Receptivo 24/7",
+  description = "Empresa fundada en 2006 especializada en traslados aeropuerto SCL, rutas del vino, centros de ski y turismo privado en Santiago de Chile. Servicio continuado 24/7."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="New Route Chile, transfer aeropuerto santiago, traslados privados chile, tour valle de casablanca, tour concha y toro, transfer valle nevado, transporte hotelero santiago" />
+    <link rel="canonical" href="https://newroute.cl" />
+
+    <!-- OpenGraph Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="New Route Chile" />
+    <meta property="og:locale" content="es_CL" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "New Route Chile",
+      "telephone": "+56 2 2394 2153",
+      "email": "contacto@newroute.cl",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ahumada 236, Oficina 510",
+        "addressLocality": "Santiago",
+        "addressRegion": "Región Metropolitana",
+        "postalCode": "8320000",
+        "addressCountry": "CL"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "priceRange": "$$"
+    }
+    </script>
+  </head>
+  <body class="bg-stone-50 text-stone-900 font-sans antialiased selection:bg-amber-800 selection:text-white">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+</style>

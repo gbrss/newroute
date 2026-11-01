@@ -1,0 +1,10 @@
+name = "newroute-cl-landing"
+compatibility_date = "2026-10-31"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+COMPANY_NAME = "New Route Chile"
+COMPANY_PHONE = "+56 2 2394 2153"
+WHATSAPP_NUMBER = "+56 9 8412 8890"
+COMPANY_EMAIL = "contacto@newroute.cl"
+ADDRESS = "Ahumada 236, Oficina 510, Santiago Centro"

@@ -1,0 +1,23 @@
+---
+// /astro/src/pages/gerencia.astro (Portal de Administración y Despacho Oculto)
+import Layout from '../layouts/Layout.astro';
+import { GerenciaPage } from '../../src/pages/GerenciaPage';
+import { INITIAL_BOOKINGS_SEED, INITIAL_CONTACT_SEED, SERVICES_TARIFFS } from '../../src/data/newrouteData';
+---
+
+<Layout
+  title="Acceso Restringido · Gerencia New Route Chile"
+  description="Portal de despacho y administración interna de operaciones."
+>
+  <!-- Isla interactiva de Gerencia con formulario de login de acceso obligatorio -->
+  <GerenciaPage
+    client:only="react"
+    bookings={INITIAL_BOOKINGS_SEED}
+    contacts={INITIAL_CONTACT_SEED}
+    tariffs={SERVICES_TARIFFS}
+    onRefreshData={() => {}}
+    onNavigateHome={() => {
+      window.location.href = '/';
+    }}
+  />
+</Layout>

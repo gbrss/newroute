@@ -1,0 +1,63 @@
+---
+// src/components/astro/CompanyHistory.astro
+// Componente 100% Astro puro para historia oficial
+import { IMAGES } from '../../data/newrouteData';
+---
+
+<section id="historia" class="py-20 lg:py-28 bg-white border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <div class="lg:col-span-5 order-2 lg:order-1">
+        <div class="relative">
+          <div class="overflow-hidden rounded-2xl shadow-xl border border-stone-200">
+            <img
+              src={IMAGES.city}
+              alt="Santiago histórico New Route Chile"
+              class="w-full h-[440px] object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div class="absolute -bottom-6 -right-6 bg-stone-900 text-white p-6 rounded-xl border border-stone-800 shadow-xl max-w-[260px]">
+            <div class="text-3xl font-bold font-display text-amber-400 mb-1">18+ Años</div>
+            <p class="text-xs text-stone-300 leading-snug">
+              Fundada en 2006. Servicio continuo en Santiago, cordillera y valles vitivinícolas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 order-1 lg:order-2 space-y-6">
+        <div class="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-amber-700">
+          <span>Nuestra Historia & Trayectoria</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl font-bold font-display text-stone-900 tracking-tight leading-tight">
+          Una empresa nacida de la <span class="text-amber-700">alta hotelería</span> para pasajeros y empresas exigentes
+        </h2>
+
+        <div class="space-y-4 text-stone-600 leading-relaxed font-normal text-base">
+          <p>
+            <strong>New Route Chile</strong> fue fundada en el año <strong>2006</strong> por un equipo multidisciplinario de más de 20 profesionales con una amplia trayectoria vinculada al área de <strong>Hotelería y Turismo</strong>, sumando cada integrante un mínimo de 10 años de experiencia previa.
+          </p>
+          <p>
+            Nuestro objetivo fundamental es entregar un servicio de transporte y turismo de la más alta calidad dentro de la Región Metropolitana y zonas turísticas de Chile, operando de manera continua las <strong>24 horas del día</strong> los 365 días del año bajo tarifas claras y transparentes.
+          </p>
+          <p>
+            Mantenemos convenios y tarifas preferenciales para huéspedes de los principales hoteles de 4 y 5 estrellas de la capital, destacando acuerdos con el <strong>Hotel InterContinental Santiago</strong>.
+          </p>
+        </div>
+
+        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200">
+            <h4 class="text-sm font-bold text-stone-900">Conductores de Turismo</h4>
+            <p class="text-xs text-stone-600 mt-1">Profesionales con credencial turística y opción bilingüe inglés/español.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200">
+            <h4 class="text-sm font-bold text-stone-900">Seguridad & Seguros</h4>
+            <p class="text-xs text-stone-600 mt-1">Pólizas de seguro de pasajeros por asiento y monitoreo GPS 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

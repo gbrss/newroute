@@ -1,0 +1,58 @@
+---
+// src/pages/index.astro
+// Página principal 100% en componentes Astro
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/astro/Navbar.astro';
+import Hero from '../components/astro/Hero.astro';
+import TestimonialsSection from '../components/astro/TestimonialsSection.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import Footer from '../components/astro/Footer.astro';
+---
+
+<Layout title="New Route Chile | Traslados Privados, Aeropuerto y Turismo Receptivo 24/7">
+  <Navbar currentPage="home" />
+  <Hero />
+
+  <!-- Enlaces Directos a Páginas Individuales -->
+  <section class="py-16 bg-white border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="p-8 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col justify-between hover:border-amber-400 transition-colors">
+        <div>
+          <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block mb-1">
+            Conoce Nuestra Trayectoria
+          </span>
+          <h3 class="text-2xl font-bold font-display text-stone-900">
+            Nuestra Empresa (Desde 2006)
+          </h3>
+          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
+            Más de 18 años de experiencia, equipo de 20 especialistas de alta hotelería y flota ejecutiva de primer nivel.
+          </p>
+        </div>
+        <a href="/empresa" class="mt-4 text-xs font-bold text-amber-800 hover:text-amber-950 font-display">
+          Ver Página de Nuestra Empresa &rarr;
+        </a>
+      </div>
+
+      <div class="p-8 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col justify-between hover:border-amber-400 transition-colors">
+        <div>
+          <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block mb-1">
+            Tarifario Oficial 2026
+          </span>
+          <h3 class="text-2xl font-bold font-display text-stone-900">
+            Servicios Turísticos & Tarifas
+          </h3>
+          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
+            Consulta los valores oficiales en pesos chilenos para traslados al Aeropuerto SCL, rutas del vino y cordillera.
+          </p>
+        </div>
+        <a href="/servicios" class="mt-4 text-xs font-bold text-amber-800 hover:text-amber-950 font-display">
+          Ver Catálogo Completo de Tarifas &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <TestimonialsSection />
+  <ContactForm />
+  <Footer />
+</Layout>
