@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Phone, Calendar, Menu, X, Clock, MapPin, Compass } from 'lucide-react';
+import { Phone, Calendar, Menu, X, Clock, MapPin } from 'lucide-react';
 import { COMPANY_INFO } from '../data/newrouteData';
+import logoNewRoute from '../assets/images/logo.png'; // <-- Importación del logo
 
 export type AppPage = 'home' | 'empresa' | 'servicios';
 
@@ -80,22 +81,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={() => handleNavClick('home')}
           className="flex items-center gap-3 group text-left cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-lg bg-amber-600 flex items-center justify-center text-stone-950 font-bold shadow-md shadow-amber-600/20 group-hover:bg-amber-500 transition-colors">
-            <Compass className="w-6 h-6 text-stone-950" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-white font-display">
-                NEW ROUTE
-              </span>
-              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                CHILE
-              </span>
-            </div>
-            <p className="text-[11px] text-stone-400 font-light tracking-wide">
-              Transporte & Turismo · Desde 2006
-            </p>
-          </div>
+          {/* Aquí reemplazamos el ícono por la imagen real */}
+          {/* Ajustamos el alto (h-12) para que se vea bien en la barra de navegación */}
+          <img 
+            src={logoNewRoute} 
+            alt="New Route Chile Logo" 
+            className="h-18 w-auto object-contain transition-transform group-hover:scale-105" 
+          />
         </button>
 
         {/* Desktop menu */}

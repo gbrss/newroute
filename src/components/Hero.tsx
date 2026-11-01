@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Calendar, Users, MapPin, ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { COMPANY_INFO, IMAGES, SERVICES_TARIFFS } from '../data/newrouteData';
 
+// Asegúrate de que esta ruta sea la correcta para tu video
+import heroVideo from '../assets/videos/hero-bg.mp4';
+
 interface HeroProps {
   onQuickBook: (serviceId?: string) => void;
   onOpenAstro?: () => void;
@@ -17,16 +20,26 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
 
   return (
     <section id="inicio" className="relative min-h-[680px] lg:min-h-[760px] flex items-center bg-stone-950 text-white overflow-hidden">
-      {/* Background Photography with atmospheric overlay */}
+      
+      {/* Background Video with atmospheric overlay */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={IMAGES.hero}
-          alt="Transporte ejecutivo New Route Chile en ruta con cordillera de los Andes"
-          className="w-full h-full object-cover object-center filter brightness-[0.45] scale-105 transition-transform duration-1000 ease-out"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-stone-950/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-950/60 to-transparent" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={IMAGES.hero}
+          // 1. Subimos el brillo de 0.45 a 0.75 o 0.8
+          className="w-full h-full object-cover object-center filter brightness-[0.75] scale-105"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        
+        {/* 2. Suavizamos los gradientes oscuros */}
+        {/* El gradiente vertical se deja un poco para que el texto de abajo se lea bien */}
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/30 to-stone-950/40" />
+        {/* El gradiente de izquierda a derecha se reduce drásticamente para iluminar el video */}
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-950/30 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
@@ -40,16 +53,16 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
               <span>18+ Años de Excelencia</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.08] text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.08] text-white drop-shadow-lg">
               Transporte Privado de Alta Gama & <span className="text-amber-400">Turismo Receptivo 24/7</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-stone-300 max-w-2xl leading-relaxed font-light">
+            <p className="text-lg sm:text-xl text-stone-200 max-w-2xl leading-relaxed font-light drop-shadow">
               Conexión directa entre el Aeropuerto SCL, hoteles de lujo, viñas de prestigio y los Andes chilenos. Conductores profesionales formados en alta hotelería y flota ejecutiva de máximo estándar.
             </p>
 
             {/* Proof Points */}
-            <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-stone-300 border-t border-stone-800/80">
+            <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-stone-200 border-t border-stone-700/80">
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Atención 24/7 sin recargo nocturno</span>
@@ -67,14 +80,14 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
             <div className="flex flex-wrap items-center gap-3 pt-4">
               <a
                 href="#servicios"
-                className="px-5 py-3 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 font-medium text-xs border border-stone-700 transition-colors"
+                className="px-5 py-3 rounded-lg bg-stone-800/80 hover:bg-stone-700 backdrop-blur-sm text-stone-200 font-medium text-xs border border-stone-600 transition-colors"
               >
                 Ver Todas las Tarifas Oficiales
               </a>
               {onOpenAstro && (
                 <button
                   onClick={onOpenAstro}
-                  className="px-4 py-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 font-bold text-xs border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 font-bold text-xs border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer backdrop-blur-sm"
                 >
                   <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                   <span>Código Astro JS & Cloudflare</span>
@@ -84,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
                 href={`https://wa.me/${COMPANY_INFO.whatsappRaw}?text=${encodeURIComponent('Hola New Route Chile, deseo consultar disponibilidad para un traslado.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-stone-300 hover:text-emerald-400 font-medium text-xs transition-colors py-2 px-2"
+                className="inline-flex items-center gap-2 text-stone-200 hover:text-emerald-400 font-medium text-xs transition-colors py-2 px-2 drop-shadow"
               >
                 <span>WhatsApp 24/7: {COMPANY_INFO.whatsapp}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
