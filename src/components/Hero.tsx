@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import { Calendar, Users, MapPin, ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { COMPANY_INFO, IMAGES, SERVICES_TARIFFS } from '../data/newrouteData';
 
-// ❌ ELIMINAMOS ESTA LÍNEA:
-// import heroVideo from '../assets/videos/hero-bg.mp4';
-
 interface HeroProps {
-  onQuickBook: (serviceId?: string) => void;
-  onOpenAstro?: () => void;
+  // Ya no necesitamos props de funciones, usaremos eventos
 }
 
-export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
+export const Hero: React.FC<HeroProps> = () => {
   const [selectedService, setSelectedService] = useState('transfer-aeropuerto');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onQuickBook(selectedService);
+    // Disparamos el evento que abre el modal de reserva
+    window.dispatchEvent(new CustomEvent('open-booking-modal', { 
+      detail: { serviceId: selectedService } 
+    }));
   };
 
   return (
@@ -31,9 +30,7 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
           poster={IMAGES.hero}
           className="w-full h-full object-cover object-center filter brightness-[0.75] scale-105"
         >
-          {/* ✅ CORRECCIÓN: Ruta directa al archivo en la carpeta public */}
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
-          {/* Nota: Si lo moviste directo a la raíz de public, usa src="/hero-bg.mp4" */}
         </video>
         
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/30 to-stone-950/40" />
@@ -42,7 +39,6 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column: Editorial Presentation */}
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
@@ -59,7 +55,6 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
               Conexión directa entre el Aeropuerto SCL, hoteles de lujo, viñas de prestigio y los Andes chilenos. Conductores profesionales formados en alta hotelería y flota ejecutiva de máximo estándar.
             </p>
 
-            {/* Proof Points */}
             <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-stone-200 border-t border-stone-700/80">
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0" />
@@ -82,15 +77,6 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
               >
                 Ver Todas las Tarifas Oficiales
               </a>
-              {onOpenAstro && (
-                <button
-                  onClick={onOpenAstro}
-                  className="px-4 py-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 font-bold text-xs border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer backdrop-blur-sm"
-                >
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                  <span>Código Astro JS & Cloudflare</span>
-                </button>
-              )}
               <a
                 href={`https://wa.me/${COMPANY_INFO.whatsappRaw}?text=${encodeURIComponent('Hola New Route Chile, deseo consultar disponibilidad para un traslado.')}`}
                 target="_blank"
@@ -103,7 +89,6 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
             </div>
           </div>
 
-          {/* Right Column: Integrated Instant Booking Quote Card */}
           <div className="lg:col-span-5">
             <div className="bg-stone-900/90 backdrop-blur-md rounded-2xl border border-stone-800 p-6 sm:p-8 shadow-2xl">
               <div className="mb-6">

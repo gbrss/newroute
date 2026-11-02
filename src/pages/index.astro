@@ -2,62 +2,159 @@
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/astro/Navbar.astro';
-// Cambiamos la importación para usar tu componente de React
 import { Hero } from '../components/Hero'; 
 import TestimonialsSection from '../components/astro/TestimonialsSection.astro';
 import ContactForm from '../components/astro/ContactForm.astro';
 import Footer from '../components/astro/Footer.astro';
+
+// Importamos los datos para las tarjetas
+import { SERVICES_TARIFFS } from '../data/newrouteData';
+import { formatCLP } from '../lib/storage';
+
+// Tomamos solo los 3 primeros servicios para destacar
+const featuredServices = SERVICES_TARIFFS.slice(0, 3);
 ---
 
 <Layout title="New Route Chile | Traslados Privados, Aeropuerto y Turismo Receptivo 24/7">
   <Navbar currentPage="home" />
   
-  <!-- ¡AQUÍ ESTÁ LA MAGIA! Agregamos client:load -->
-  <Hero 
-    client:load 
-    onQuickBook={(id) => console.log('Reserva:', id)} 
-  />
+  <!-- Hero con React (Formulario de reserva) -->
+  <Hero client:load />
 
-  <!-- Enlaces Directos a Páginas Individuales -->
+  <!-- SECCIÓN 1: Servicios Destacados (3 tarjetas) -->
   <section class="py-16 bg-white border-b border-stone-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="p-8 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col justify-between hover:border-amber-400 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
           <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block mb-1">
-            Conoce Nuestra Trayectoria
+            Servicios Destacados
           </span>
-          <h3 class="text-2xl font-bold font-display text-stone-900">
-            Nuestra Empresa (Desde 2006)
-          </h3>
-          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
-            Más de 18 años de experiencia, equipo de 20 especialistas de alta hotelería y flota ejecutiva de primer nivel.
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-stone-900">
+            Experiencias & Traslados Populares
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-1">
+            Tarifas directas y fijas con conductores profesionales y vehículos de alta gama.
           </p>
         </div>
-        <a href="/empresa" class="mt-4 text-xs font-bold text-amber-800 hover:text-amber-950 font-display">
-          Ver Página de Nuestra Empresa &rarr;
+        
+        <a href="/servicios" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-amber-800 hover:text-amber-950 transition-colors group">
+          <span>Ver Catálogo Completo & Todas las Tarifas</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
         </a>
       </div>
 
-      <div class="p-8 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col justify-between hover:border-amber-400 transition-colors">
-        <div>
-          <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block mb-1">
-            Tarifario Oficial 2026
-          </span>
-          <h3 class="text-2xl font-bold font-display text-stone-900">
-            Servicios Turísticos & Tarifas
-          </h3>
-          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
-            Consulta los valores oficiales en pesos chilenos para traslados al Aeropuerto SCL, rutas del vino y cordillera.
-          </p>
-        </div>
-        <a href="/servicios" class="mt-4 text-xs font-bold text-amber-800 hover:text-amber-950 font-display">
-          Ver Catálogo Completo de Tarifas &rarr;
-        </a>
+      <!-- Grid de 3 Tarjetas -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featuredServices.map((item) => (
+          <div class="bg-stone-50 rounded-2xl border border-stone-200 overflow-hidden hover:shadow-lg transition-all flex flex-col group">
+            <div class="relative h-44 overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.name}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent"></div>
+              <span class="absolute bottom-3 left-3 bg-stone-900/90 text-white text-[11px] font-medium px-2 py-0.5 rounded backdrop-blur-sm">
+                {item.durationApprox}
+              </span>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-base text-stone-900 leading-snug">
+                  {item.name}
+                </h3>
+                <p class="text-xs text-stone-600 mt-2 line-clamp-2">
+                  {item.description}
+                </p>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-stone-500 block">Desde (1-3 PAX)</span>
+                  <strong class="text-sm font-bold text-amber-800 font-display">
+                    {formatCLP(item.price1to3)}
+                  </strong>
+                </div>
+
+                <!-- Botón que abre el modal de React -->
+                <button
+                  data-service-id={item.id}
+                  class="open-booking-card-btn px-3.5 py-1.5 rounded-lg bg-stone-900 hover:bg-amber-600 text-white text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  Reservar
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
+  <!-- SECCIÓN 2: Banner Corporativo -->
+  <section class="py-16 bg-stone-900 text-white border-b border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 space-y-3">
+          <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider block">
+            Tradición & Confianza Hotelera
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">
+            New Route Chile: Más de 18 Años de Excelencia
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-300 leading-relaxed font-light">
+            Fundada en 2006 en Santiago por especialistas en alta hotelería y turismo receptivo. Conoce nuestra historia, equipo de conductores certificados y alianzas preferentes con hoteles 5 estrellas.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-stone-400">
+            <span class="flex items-center gap-1.5">
+              <span class="text-amber-400">🕒</span>
+              <span>Atención 24 Horas</span>
+            </span>
+            <span aria-hidden="true" class="text-stone-700">·</span>
+            <span class="flex items-center gap-1.5">
+              <span class="text-amber-400">🛡️</span>
+              <span>Seguros de Pasajero</span>
+            </span>
+            <span aria-hidden="true" class="text-stone-700">·</span>
+            <span class="flex items-center gap-1.5">
+              <span class="text-amber-400">🏆</span>
+              <span>Convenio InterContinental</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 flex justify-start lg:justify-end">
+          <a
+            href="/empresa"
+            class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase tracking-wider transition-all transform active:scale-95 flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+          >
+            <span>Conocer Nuestra Empresa</span>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: Testimonios y Contacto (Componentes Astro) -->
   <TestimonialsSection />
   <ContactForm />
+  
   <Footer />
 </Layout>
+
+<script>
+  // Script para conectar los botones "Reservar" de las tarjetas al modal de React
+  const cardBtns = document.querySelectorAll('.open-booking-card-btn');
+  cardBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const serviceId = btn.getAttribute('data-service-id');
+      window.dispatchEvent(new CustomEvent('open-booking-modal', { 
+        detail: { serviceId } 
+      }));
+    });
+  });
+</script>

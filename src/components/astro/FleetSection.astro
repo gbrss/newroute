@@ -1,7 +1,8 @@
 ---
 // src/components/astro/FleetSection.astro
-// Componente 100% Astro puro para flota ejecutiva
-import { IMAGES } from '../../data/newrouteData';
+import heroImg from '../../assets/images/newroute_hero_andes_1793504324417.jpg';
+import skiImg from '../../assets/images/newroute_ski_cordillera_1793504352471.jpg';
+import wineImg from '../../assets/images/newroute_wine_valle_1793504340436.jpg';
 
 const fleetCategories = [
   {
@@ -9,21 +10,21 @@ const fleetCategories = [
     type: 'Van Ejecutiva (7 a 19 Pasajeros)',
     description: 'Nuestra flota insignia para grupos, familias grandes y comitivas de congresos. Espacio para valijas grandes, equipaje de esquí y trayectos largos con máxima suavidad.',
     features: ['Asientos individuales de cuero reclinable', 'Climatización bi-zona frío/calor', 'Gran maletero independiente', 'Porta-skies y cadenas de nieve'],
-    image: IMAGES.hero,
+    image: heroImg.src,
   },
   {
     title: 'SUV Ejecutiva 4x4',
     type: 'Camioneta Tracción Integral (1 a 4 Pasajeros)',
     description: 'Vehículos con tracción a las cuatro ruedas preparados para el ascenso a la alta cordillera, centros de esquí (Valle Nevado, Portillo) y caminos de ripio en viñas boutique.',
     features: ['Tracción 4WD para nieve y barro', 'Suspensión adaptativa de confort', 'Amplio espacio para compras de vinos', 'Seguro de montaña para pasajeros'],
-    image: IMAGES.ski,
+    image: skiImg.src,
   },
   {
     title: 'Sedán Ejecutivo Confort',
     type: 'Automóvil de Gama Alta (1 a 3 Pasajeros)',
     description: 'Elegancia y discreción para traslados ejecutivos directos aeropuerto-hotel y servicio a disposición por hora en el distrito financiero de Santiago.',
     features: ['Insonorización acústica de cabina', 'Cargadores USB y conectividad', 'Conductores de impecable presentación', 'Acceso prioritario aeropuerto'],
-    image: IMAGES.wine,
+    image: wineImg.src,
   },
 ];
 ---
@@ -31,8 +32,9 @@ const fleetCategories = [
 <section id="flota" class="py-20 bg-stone-900 text-white border-b border-stone-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mb-14">
-      <div class="text-xs font-semibold tracking-wider uppercase text-amber-400 mb-2">
-        <span>🚗 Nuestra Flota</span>
+      <div class="text-xs font-semibold tracking-wider uppercase text-amber-400 mb-2 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M4 12h16"/><path d="M12 4v16"/></svg>
+        <span>Nuestra Flota</span>
       </div>
       <h2 class="text-3xl sm:text-4xl font-bold font-display text-white tracking-tight">
         Vehículos Ejecutivos Preparados para Todo Terreno
@@ -42,6 +44,7 @@ const fleetCategories = [
       </p>
     </div>
 
+    <!-- Grid de 3 Tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {fleetCategories.map((f) => (
         <div class="bg-stone-950/80 rounded-2xl border border-stone-800 overflow-hidden flex flex-col group hover:border-amber-500/40 transition-colors">
@@ -56,7 +59,7 @@ const fleetCategories = [
             <div class="my-5 pt-4 border-t border-stone-800 space-y-2">
               {f.features.map((feat) => (
                 <div class="flex items-center gap-2 text-xs text-stone-300">
-                  <span class="text-amber-400">✓</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-amber-400 shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
                   <span>{feat}</span>
                 </div>
               ))}
@@ -65,5 +68,42 @@ const fleetCategories = [
         </div>
       ))}
     </div>
+
+    <!-- Fila de 4 Íconos Inferiores -->
+    <div class="mt-12 pt-8 border-t border-stone-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Ícono 1 -->
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-amber-500 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <div class="text-sm font-bold text-white">Seguros por Asiento</div>
+          <div class="text-[11px] text-stone-400">Pólizas de responsabilidad civil</div>
+        </div>
+      </div>
+      <!-- Ícono 2 -->
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-amber-500 shrink-0"><line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></svg>
+        <div>
+          <div class="text-sm font-bold text-white">Equipamiento Nieve</div>
+          <div class="text-[11px] text-stone-400">Cadenas y tracción autorizada</div>
+        </div>
+      </div>
+      <!-- Ícono 3 -->
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-amber-500 shrink-0"><rect width="14" height="18" x="5" y="3" rx="2" ry="2"/><path d="M9 18h6"/></svg>
+        <div>
+          <div class="text-sm font-bold text-white">Capacidad de Valijas</div>
+          <div class="text-[11px] text-stone-400">Espacio para equipaje sobredimensionado</div>
+        </div>
+      </div>
+      <!-- Ícono 4 -->
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-amber-500 shrink-0"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" x2="12.01" y1="20" y2="20"/></svg>
+        <div>
+          <div class="text-sm font-bold text-white">Monitoreo Satelital</div>
+          <div class="text-[11px] text-stone-400">GPS y telemetría 24/7</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>

@@ -55,8 +55,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   } else if (passengersGroup === '4-6') {
     estimatedPrice = currentService.price4to6;
   } else {
-    // 7+ pax: base price + 40%
-    estimatedPrice = Math.round(currentService.price4to6 * 1.4);
+    // Usa el precio 7+ si está definido, si no, calcula 40% extra
+    estimatedPrice = currentService.price7plus || Math.round(currentService.price4to6 * 1.4);
   }
 
   const handlePassengersGroupChange = (grp: '1-3' | '4-6' | '7+') => {
@@ -101,6 +101,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   };
 
   const handleReset = () => {
+    if (confirmedBooking) {
+      window.dispatchEvent(new CustomEvent('booking-created', { detail: { booking: confirmedBooking } }));
+    }
+
     setConfirmedBooking(null);
     setCustomerName('');
     setCustomerEmail('');
@@ -124,13 +128,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     );
   };
 
+  const isGerencia = typeof window !== 'undefined' && window.location.pathname === '/gerencia';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/80 backdrop-blur-sm overflow-hidden">
       
-      {/* Contenedor Principal del Modal: flex-col y max-h para que no se salga de la pantalla */}
       <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-stone-200 flex flex-col max-h-[95vh] sm:max-h-[90vh]">
         
-        {/* Header Fijo */}
         <div className="bg-stone-900 text-white px-6 py-4 sm:py-5 flex items-center justify-between shrink-0 rounded-t-2xl">
           <div>
             <div className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
@@ -149,10 +153,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           </button>
         </div>
 
-        {/* Body con Scroll (Aquí ocurre la magia) */}
         <div className="overflow-y-auto flex-grow">
           {confirmedBooking ? (
-            /* Confirmation Success Screen */
             <div className="p-6 sm:p-8 space-y-6 text-stone-800">
               <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900">
                 <CheckCircle2 className="w-7 h-7 text-emerald-600 shrink-0" />
@@ -208,12 +210,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   onClick={handleReset}
                   className="w-full py-2.5 px-4 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium text-xs transition-colors"
                 >
-                  Volver a la página principal
+                  {isGerencia ? 'Ver Reserva' : 'Volver a la página principal'}
                 </button>
               </div>
             </div>
           ) : (
-            /* Booking Form */
             <form id="booking-form" onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
               {formError && (
                 <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-lg font-medium">
@@ -221,7 +222,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               )}
 
-              {/* Step 1: Service Selection */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
                   1. Selección de Servicio
@@ -240,7 +240,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <p className="text-xs text-stone-500 mt-1 italic">{currentService.subtitle}</p>
               </div>
 
-              {/* Step 2: Passenger Size & Group */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
                   2. Tamaño del Grupo & Vehículo
@@ -290,13 +289,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <div className="text-xs font-bold">7+ Personas</div>
                     <div className="text-[11px] text-stone-500 font-normal mt-0.5">Sprinter VIP</div>
                     <div className="text-xs text-amber-700 font-bold mt-1 font-display">
-                      {formatCLP(Math.round(currentService.price4to6 * 1.4))}
+                      {formatCLP(currentService.price7plus || Math.round(currentService.price4to6 * 1.4))}
                     </div>
                   </button>
                 </div>
               </div>
 
-              {/* Step 3: Date, Time & Coordinates */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-stone-700 mb-1 flex items-center gap-1">
@@ -368,7 +366,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
 
-              {/* Luggage & Amenities */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-stone-700 mb-1 flex items-center gap-1">
@@ -407,7 +404,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
 
-              {/* Step 4: Contact Details */}
               <div className="pt-2 border-t border-stone-200">
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-3">
                   3. Datos del Pasajero o Solicitante
@@ -474,7 +470,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           )}
         </div>
 
-        {/* Footer Fijo (Solo se muestra si no estamos en la pantalla de confirmación) */}
         {!confirmedBooking && (
           <div className="p-4 sm:p-5 bg-stone-900 rounded-b-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
             <div>
@@ -491,7 +486,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
             <button
               type="submit"
-              form="booking-form" // Conecta este botón con el formulario que está en el body
+              form="booking-form"
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase tracking-wider transition-all transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer shadow-md"
             >
               <span>Confirmar y Enviar Reserva</span>

@@ -6,7 +6,7 @@ import { INITIAL_BOOKINGS_SEED, INITIAL_CONTACT_SEED, SERVICES_TARIFFS } from '.
 ---
 
 <Layout
-  title="Acceso Restringido · Gerencia New Route Chile"
+  title="Portal de Gerencia | New Route Chile"
   description="Portal de despacho y administración interna de operaciones."
 >
   <GerenciaView
@@ -14,9 +14,5 @@ import { INITIAL_BOOKINGS_SEED, INITIAL_CONTACT_SEED, SERVICES_TARIFFS } from '.
     bookings={INITIAL_BOOKINGS_SEED}
     contacts={INITIAL_CONTACT_SEED}
     tariffs={SERVICES_TARIFFS}
-    onRefreshData={() => {}}
-    onNavigateHome={() => {
-      window.location.href = '/';
-    }}
   />
 </Layout>

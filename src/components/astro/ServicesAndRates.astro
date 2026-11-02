@@ -1,6 +1,5 @@
 ---
 // src/components/astro/ServicesAndRates.astro
-// Componente 100% Astro puro con filtrado nativo en vanilla JS
 import { SERVICES_TARIFFS } from '../../data/newrouteData';
 import { formatCLP } from '../../lib/storage';
 
@@ -98,23 +97,42 @@ const categories = [
               </div>
             </div>
 
-            <a
-              href={`https://wa.me/56984128890?text=${encodeURIComponent(`Hola New Route Chile, deseo cotizar y reservar el servicio: ${item.name}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="w-full py-2.5 px-4 rounded-lg bg-stone-900 hover:bg-amber-500 hover:text-stone-950 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm text-center"
+            <!-- Botón de Reservar -->
+            <button
+              data-service-id={item.id}
+              class="reserve-service-btn w-full py-2.5 px-4 rounded-lg bg-stone-900 hover:bg-amber-500 hover:text-stone-950 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
             >
               <span>Reservar Este Servicio &rarr;</span>
-            </a>
+            </button>
           </div>
         </div>
       ))}
     </div>
+
+    <!-- SECCIÓN DEL BOTÓN "COTIZAR VAN GRUPAL" -->
+    <div class="mt-12 p-6 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h4 class="text-sm font-bold text-stone-900">
+          ¿Viajas con un grupo corporativo o delegación de más de 7 pasajeros?
+        </h4>
+        <p class="text-xs text-stone-600 mt-1">
+          Disponemos de vans Mercedes-Benz Sprinter para 12, 16 y 19 pasajeros con tarifas especiales por jornada o temporada.
+        </p>
+      </div>
+      <!-- CORRECCIÓN: Convertimos el <a> en un <button> y le damos un ID/Clase -->
+      <button
+        id="cotizar-van-btn"
+        class="shrink-0 px-5 py-2.5 rounded-lg bg-stone-900 text-amber-400 hover:bg-stone-800 font-semibold text-xs transition-colors cursor-pointer"
+      >
+        Cotizar Van Grupal
+      </button>
+    </div>
+
   </div>
 </section>
 
 <script>
-  // Script vanilla empaquetado por Astro
+  // 1. Script para los filtros de categorías
   const buttons = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.service-card');
 
@@ -139,4 +157,22 @@ const categories = [
       });
     });
   });
+
+  // 2. Script para abrir el modal de React desde las tarjetas
+  const reserveBtns = document.querySelectorAll('.reserve-service-btn');
+  reserveBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const serviceId = btn.getAttribute('data-service-id');
+      window.dispatchEvent(new CustomEvent('open-booking-modal', { detail: { serviceId } }));
+    });
+  });
+
+  // 3. Script para abrir el modal desde el botón "Cotizar Van Grupal"
+  const vanBtn = document.getElementById('cotizar-van-btn');
+  if (vanBtn) {
+    vanBtn.addEventListener('click', () => {
+      // Disparamos el evento pasando el id 'disposicion-por-hora' o simplemente vacío
+      window.dispatchEvent(new CustomEvent('open-booking-modal'));
+    });
+  }
 </script>

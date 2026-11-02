@@ -1,10 +1,11 @@
 ---
 // src/pages/empresa.astro
-// Página individual 100% en componentes Astro
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/astro/Navbar.astro';
 import CompanyHistory from '../components/astro/CompanyHistory.astro';
+import CompanyPillars from '../components/astro/CompanyPillars.astro';
 import FleetSection from '../components/astro/FleetSection.astro';
+import CompanyCTA from '../components/astro/CompanyCTA.astro';
 import Footer from '../components/astro/Footer.astro';
 ---
 
@@ -16,19 +17,31 @@ import Footer from '../components/astro/Footer.astro';
 
   <header class="bg-stone-900 text-white py-14 border-b border-stone-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="text-xs text-stone-400 mb-3">
-        <a href="/" class="hover:text-white">Inicio</a>
+      <!-- Breadcrumb -->
+      <nav class="text-xs text-stone-400 mb-6">
+        <a href="/" class="hover:text-white transition-colors">Inicio</a>
         <span class="mx-2 text-stone-600">/</span>
         <span class="text-amber-400">Nuestra Empresa</span>
       </nav>
+      
+      <!-- Eyebrow Text -->
+      <div class="text-xs font-semibold tracking-wider uppercase text-amber-500 mb-2">
+        Acerca de New Route Chile · Est. 2006
+      </div>
+      
+      <!-- Título Principal -->
       <h1 class="text-4xl sm:text-5xl font-bold font-display text-white">Nuestra Empresa & Trayectoria</h1>
-      <p class="text-stone-300 mt-2 max-w-2xl font-light">
-        Más de 18 años entregando soluciones de transporte privado continuo 24/7 con los más altos estándares hoteleros.
+      
+      <!-- Subtítulo con ancho máximo corregido a 3xl -->
+      <p class="text-stone-300 mt-4 max-w-3xl font-light leading-relaxed">
+        Casi dos décadas entregando soluciones de transporte privado, convenios hoteleros, excursiones a valles vitivinícolas y centros de esquí con los más altos estándares de calidad y seguridad en Chile.
       </p>
     </div>
   </header>
 
   <CompanyHistory />
+  <CompanyPillars />
   <FleetSection />
+  <CompanyCTA />
   <Footer />
 </Layout>

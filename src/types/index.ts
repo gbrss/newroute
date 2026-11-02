@@ -8,6 +8,7 @@ export interface ServiceTariff {
   description: string;
   price1to3: number; // CLP
   price4to6: number; // CLP
+  price7plus?: number; // CLP
   priceGroupNote?: string;
   durationApprox: string;
   highlights: string[];

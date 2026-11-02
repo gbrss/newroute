@@ -1,31 +1,36 @@
 ---
 // src/components/astro/CompanyHistory.astro
-// Componente 100% Astro puro para historia oficial
-import { IMAGES } from '../../data/newrouteData';
+import santiagoImg from '../../assets/images/newroute_santiago_city_1793504373661.jpg';
+import { COMPANY_INFO } from '../../data/newrouteData';
 ---
 
 <section id="historia" class="py-20 lg:py-28 bg-white border-b border-stone-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      
+      <!-- Columna Izquierda: Imagen y Tarjeta Flotante -->
       <div class="lg:col-span-5 order-2 lg:order-1">
         <div class="relative">
           <div class="overflow-hidden rounded-2xl shadow-xl border border-stone-200">
             <img
-              src={IMAGES.city}
+              src={santiagoImg.src}
               alt="Santiago histórico New Route Chile"
               class="w-full h-[440px] object-cover"
               loading="lazy"
             />
           </div>
+          
+          <!-- Tarjeta Flotante de 18+ Años -->
           <div class="absolute -bottom-6 -right-6 bg-stone-900 text-white p-6 rounded-xl border border-stone-800 shadow-xl max-w-[260px]">
             <div class="text-3xl font-bold font-display text-amber-400 mb-1">18+ Años</div>
             <p class="text-xs text-stone-300 leading-snug">
-              Fundada en 2006. Servicio continuo en Santiago, cordillera y valles vitivinícolas.
+              Entregando servicio continuo en Santiago, cordillera y valles vitivinícolas desde 2006.
             </p>
           </div>
         </div>
       </div>
 
+      <!-- Columna Derecha: Textos y Grid de Características -->
       <div class="lg:col-span-7 order-1 lg:order-2 space-y-6">
         <div class="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-amber-700">
           <span>Nuestra Historia & Trayectoria</span>
@@ -37,26 +42,63 @@ import { IMAGES } from '../../data/newrouteData';
 
         <div class="space-y-4 text-stone-600 leading-relaxed font-normal text-base">
           <p>
-            <strong>New Route Chile</strong> fue fundada en el año <strong>2006</strong> por un equipo multidisciplinario de más de 20 profesionales con una amplia trayectoria vinculada al área de <strong>Hotelería y Turismo</strong>, sumando cada integrante un mínimo de 10 años de experiencia previa.
+            <strong>New Route Chile</strong> fue fundada en el año <strong>2006</strong> por un equipo multidisciplinario de más de 20 profesionales con una amplia trayectoria vinculada al área de <strong>Hotelería y Turismo</strong>, sumando cada integrante un mínimo de 10 años de experiencia comprobada en el rubro.
           </p>
           <p>
-            Nuestro objetivo fundamental es entregar un servicio de transporte y turismo de la más alta calidad dentro de la Región Metropolitana y zonas turísticas de Chile, operando de manera continua las <strong>24 horas del día</strong> los 365 días del año bajo tarifas claras y transparentes.
+            Nuestro objetivo fundacional se mantiene intacto: entregar un servicio de transporte privado y turismo receptivo de máxima categoría dentro de la Región Metropolitana y zonas turísticas de Chile, operando de manera continua las <strong>24 horas del día</strong> los 365 días del año.
           </p>
           <p>
-            Mantenemos convenios y tarifas preferenciales para huéspedes de los principales hoteles de 4 y 5 estrellas de la capital, destacando acuerdos con el <strong>Hotel InterContinental Santiago</strong>.
+            A lo largo de casi dos décadas, hemos consolidado estrechas alianzas con los principales hoteles de 4 y 5 estrellas de la capital, destacando acuerdos y tarifas preferentes con el <strong>Hotel InterContinental Santiago</strong>, aerolíneas y corporaciones multinacionales que confían en nuestra puntualidad inquebrantable.
           </p>
         </div>
 
+        <!-- Grid de 4 Características -->
         <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200">
-            <h4 class="text-sm font-bold text-stone-900">Conductores de Turismo</h4>
-            <p class="text-xs text-stone-600 mt-1">Profesionales con credencial turística y opción bilingüe inglés/español.</p>
+          
+          <!-- Característica 1 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-amber-600"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <h4 class="text-sm font-bold text-stone-900">Conductores de Turismo</h4>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">Profesionales con credenciales, capacitación en servicio al cliente y opción bilingüe (español/inglés).</p>
           </div>
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200">
-            <h4 class="text-sm font-bold text-stone-900">Seguridad & Seguros</h4>
-            <p class="text-xs text-stone-600 mt-1">Pólizas de seguro de pasajeros por asiento y monitoreo GPS 24/7.</p>
+
+          <!-- Característica 2 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-amber-600"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <h4 class="text-sm font-bold text-stone-900">Seguridad & Seguros</h4>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">Toda nuestra flota cuenta con pólizas de seguros de pasajeros por asiento y GPS en tiempo real.</p>
           </div>
+
+          <!-- Característica 3 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-amber-600"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+              <h4 class="text-sm font-bold text-stone-900">Oficina Central</h4>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">Ahumada 236, Oficina 510, Santiago Centro. Coordinación operativa y soporte directo a clientes.</p>
+          </div>
+
+          <!-- Característica 4 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-amber-600"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <h4 class="text-sm font-bold text-stone-900">Disponibilidad 24/7</h4>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">Atención telefónica y vía WhatsApp para traslados de madrugada o emergencias hoteleras.</p>
+          </div>
+
         </div>
+
+        <!-- Línea de Sede Matriz al final -->
+        <div class="pt-4 flex items-center gap-2 text-xs text-stone-500">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-amber-500 shrink-0"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Sede Matriz: Ahumada 236, Of. 510, Santiago RM · Teléfono: {COMPANY_INFO.phone}</span>
+        </div>
+
       </div>
     </div>
   </div>

@@ -1,3 +1,4 @@
+// src/lib/storage.ts
 import { BookingRequest, ContactMessage, ServiceTariff } from '../types';
 import { INITIAL_BOOKINGS_SEED, INITIAL_CONTACT_SEED, SERVICES_TARIFFS } from '../data/newrouteData';
 
@@ -5,6 +6,7 @@ const BOOKINGS_KEY = 'newroute_bookings_v1';
 const CONTACTS_KEY = 'newroute_contacts_v1';
 const TARIFFS_KEY = 'newroute_tariffs_v1';
 
+// --- RESERVAS ---
 export function getStoredBookings(): BookingRequest[] {
   try {
     const raw = localStorage.getItem(BOOKINGS_KEY);
@@ -66,6 +68,37 @@ export function deleteBooking(id: string): BookingRequest[] {
   return updated;
 }
 
+export function exportBookingsToCSV(bookings: BookingRequest[]): void {
+  const headers = ['Codigo Ref', 'Fecha Creacion', 'Servicio', 'Cliente', 'Email', 'Telefono', 'Fecha Traslado', 'Hora', 'Pasajeros', 'Origen', 'Destino', 'Vuelo', 'Total CLP', 'Estado', 'Notas Admin'];
+  const rows = bookings.map(b => [
+    b.referenceCode,
+    new Date(b.createdAt).toLocaleDateString('es-CL'),
+    `"${b.serviceName.replace(/"/g, '""')}"`,
+    `"${b.customerName.replace(/"/g, '""')}"`,
+    b.customerEmail,
+    b.customerPhone,
+    b.date,
+    b.time,
+    b.passengers,
+    `"${b.pickupAddress.replace(/"/g, '""')}"`,
+    `"${(b.dropoffAddress || '').replace(/"/g, '""')}"`,
+    `"${(b.flightNumber || '').replace(/"/g, '""')}"`,
+    b.totalEstimatedPrice,
+    b.status,
+    `"${(b.adminNotes || '').replace(/"/g, '""')}"`,
+  ]);
+
+  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `newroute_reservas_${new Date().toISOString().slice(0, 10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// --- CONTACTOS ---
 export function getStoredContacts(): ContactMessage[] {
   try {
     const raw = localStorage.getItem(CONTACTS_KEY);
@@ -116,6 +149,7 @@ export function deleteContactMessage(id: string): ContactMessage[] {
   return updated;
 }
 
+// --- TARIFAS / SERVICIOS ---
 export function getStoredTariffs(): ServiceTariff[] {
   try {
     const raw = localStorage.getItem(TARIFFS_KEY);
@@ -129,48 +163,40 @@ export function getStoredTariffs(): ServiceTariff[] {
   }
 }
 
-export function saveTariffs(tariffs: ServiceTariff[]): void {
+export function saveTariff(tariff: ServiceTariff, isEditing: boolean): ServiceTariff[] | null {
   try {
-    localStorage.setItem(TARIFFS_KEY, JSON.stringify(tariffs));
-  } catch (e) {
-    console.error('Error saving tariffs to localStorage', e);
+    const current = getStoredTariffs();
+    let updated;
+    if (isEditing) {
+      updated = current.map(t => t.id === tariff.id ? tariff : t);
+    } else {
+      updated = [tariff, ...current];
+    }
+    localStorage.setItem(TARIFFS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch (error) {
+    console.error("Error saving tariff", error);
+    return null;
   }
 }
 
+export function deleteTariff(id: string): ServiceTariff[] | null {
+  try {
+    const current = getStoredTariffs();
+    const updated = current.filter(t => t.id !== id);
+    localStorage.setItem(TARIFFS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch (error) {
+    console.error("Error deleting tariff", error);
+    return null;
+  }
+}
+
+// --- UTILIDADES ---
 export function formatCLP(amount: number): string {
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
     currency: 'CLP',
     maximumFractionDigits: 0,
   }).format(amount);
-}
-
-export function exportBookingsToCSV(bookings: BookingRequest[]): void {
-  const headers = ['Codigo Ref', 'Fecha Creacion', 'Servicio', 'Cliente', 'Email', 'Telefono', 'Fecha Traslado', 'Hora', 'Pasajeros', 'Origen', 'Destino', 'Vuelo', 'Total CLP', 'Estado', 'Notas Admin'];
-  const rows = bookings.map(b => [
-    b.referenceCode,
-    new Date(b.createdAt).toLocaleDateString('es-CL'),
-    `"${b.serviceName.replace(/"/g, '""')}"`,
-    `"${b.customerName.replace(/"/g, '""')}"`,
-    b.customerEmail,
-    b.customerPhone,
-    b.date,
-    b.time,
-    b.passengers,
-    `"${b.pickupAddress.replace(/"/g, '""')}"`,
-    `"${(b.dropoffAddress || '').replace(/"/g, '""')}"`,
-    `"${(b.flightNumber || '').replace(/"/g, '""')}"`,
-    b.totalEstimatedPrice,
-    b.status,
-    `"${(b.adminNotes || '').replace(/"/g, '""')}"`,
-  ]);
-
-  const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `newroute_reservas_${new Date().toISOString().slice(0, 10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }

@@ -1,9 +1,11 @@
 import { ServiceTariff, Testimonial, BookingRequest, ContactMessage } from '../types';
 
+// 1. Importamos las imágenes
 import heroAndesImg from '../assets/images/newroute_hero_andes_1793504324417.jpg';
 import wineValleImg from '../assets/images/newroute_wine_valle_1793504340436.jpg';
 import skiCordilleraImg from '../assets/images/newroute_ski_cordillera_1793504352471.jpg';
 import santiagoCityImg from '../assets/images/newroute_santiago_city_1793504373661.jpg';
+import logoImg from '../assets/images/logo.png'; 
 
 export const COMPANY_INFO = {
   name: 'New Route Chile',
@@ -29,11 +31,13 @@ export const COMPANY_INFO = {
   ],
 };
 
+// 2. CORRECCIÓN CLAVE: Usamos .src para que Astro y React sepan la ruta final
 export const IMAGES = {
-  hero: heroAndesImg,
-  wine: wineValleImg,
-  ski: skiCordilleraImg,
-  city: santiagoCityImg,
+  hero: heroAndesImg.src,
+  wine: wineValleImg.src,
+  ski: skiCordilleraImg.src,
+  city: santiagoCityImg.src,
+  logo: logoImg.src,
 };
 
 export const SERVICES_TARIFFS: ServiceTariff[] = [
@@ -47,7 +51,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 55000,
     durationApprox: '35 a 50 min según destino',
     highlights: ['Monitoreo de vuelo en vivo', 'Espera de hasta 60 min sin recargo', 'Maletas grandes y equipaje protegido', 'Servicio 24 hrs'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
     featured: true,
   },
   {
@@ -60,7 +64,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 280000,
     durationApprox: '7 a 8 horas (Full Day)',
     highlights: ['Hasta 2 viñas a elección', 'Tiempo libre para almuerzo campestre', 'Vehículo ejecutivo climatizado', 'Conductor turístico'],
-    image: wineValleImg,
+    image: wineValleImg.src, // <-- CORRECCIÓN: Usar .src
     featured: true,
   },
   {
@@ -73,7 +77,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 250000,
     durationApprox: '5 a 6 horas',
     highlights: ['Visita bodegas centenarias', 'Paisajes precordilleranos', 'Flexibilidad de itinerario', 'Recogida en hotel'],
-    image: wineValleImg,
+    image: wineValleImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'tour-valle-colchagua',
@@ -85,7 +89,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 390000,
     durationApprox: '10 a 11 horas (Full Day)',
     highlights: ['Santa Cruz y Peralillo', 'Almuerzo en viñedo (opcional)', 'Traslado de larga distancia con confort VIP', 'Guía y chofer'],
-    image: wineValleImg,
+    image: wineValleImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'ski-farellones-laparva',
@@ -97,7 +101,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 240000,
     durationApprox: 'Todo el día (salida 07:00 am)',
     highlights: ['Equipamiento para nieve y cadenas certificadas', 'Espacio para skies y snowboards', 'Puntos panorámicos para fotos', 'Espera en pista'],
-    image: skiCordilleraImg,
+    image: skiCordilleraImg.src, // <-- CORRECCIÓN: Usar .src
     featured: true,
   },
   {
@@ -110,7 +114,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 270000,
     durationApprox: 'Full Day (Subida 07:00 / Retorno 16:30)',
     highlights: ['Traslado sin transbordos', 'Parada en arriendo de equipos', 'Seguro de montaña para pasajeros', 'Conductor con licencia profesional'],
-    image: skiCordilleraImg,
+    image: skiCordilleraImg.src, // <-- CORRECCIÓN: Usar .src
     featured: true,
   },
   {
@@ -123,7 +127,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 370000,
     durationApprox: '9 a 10 horas',
     highlights: ['Cuesta Los Caracoles', 'Vistas a la Laguna del Inca', 'Almuerzo en el emblemático Hotel Portillo', 'Ruta internacional segura'],
-    image: skiCordilleraImg,
+    image: skiCordilleraImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'termas-banos-colina',
@@ -135,7 +139,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 420000,
     durationApprox: '8 a 9 horas',
     highlights: ['Pozones termales naturales', 'Paradas en San José de Maipo y San Gabriel', 'Paisaje volcánico sobrecogedor', 'Vehículo alto apto para tierra'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'termas-del-corazon',
@@ -147,7 +151,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 360000,
     durationApprox: '8 horas',
     highlights: ['Microclima cálido todo el año', 'Piscinas termales cubiertas y exteriores', 'Excelente gastronomía chilena', 'Salida y retorno directo'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'cajon-embalse-yeso',
@@ -159,7 +163,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 300000,
     durationApprox: '7 a 8 horas',
     highlights: ['Vista panorámica del Embalse El Yeso', 'Picnic campestre (opcional)', 'Parada en pueblo histórico', 'Fotografía de alta montaña'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'city-tour-santiago',
@@ -171,7 +175,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 170000,
     durationApprox: '4 a 5 horas',
     highlights: ['Centro Histórico y Palacio Presidencial', 'Vistas panorámicas de la ciudad', 'Barrios gastronómicos y patrimoniales', 'Ritmo flexible a su medida'],
-    image: santiagoCityImg,
+    image: santiagoCityImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'tour-valparaiso-vina',
@@ -183,7 +187,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     price4to6: 270000,
     durationApprox: '8 a 9 horas (Full Day)',
     highlights: ['Patrimonio de la Humanidad UNESCO', 'Cerro Alegre y Cerro Concepción', 'Reloj de Flores y Costanera Viña', 'Degustación en Casablanca en ruta'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
   },
   {
     id: 'disposicion-por-hora',
@@ -196,7 +200,7 @@ export const SERVICES_TARIFFS: ServiceTariff[] = [
     priceGroupNote: 'Mínimo 3 horas ($28.000 / $35.000 por hora adicional)',
     durationApprox: 'Mínimo 3 horas',
     highlights: ['Itinerario 100% personalizado', 'Espera en puntos designados', 'Chofer ejecutivo discreto y puntual', 'Agilidad en trámites y eventos'],
-    image: heroAndesImg,
+    image: heroAndesImg.src, // <-- CORRECCIÓN: Usar .src
   },
 ];
 
