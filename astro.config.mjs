@@ -10,6 +10,9 @@ export default defineConfig({
     react(),
   ],
   vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+    },
     plugins: [tailwindcss()],
   },
   site: 'https://newroute.cl',

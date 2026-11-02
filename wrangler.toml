@@ -2,6 +2,10 @@ name = "newroute-cl-landing"
 compatibility_date = "2026-10-31"
 compatibility_flags = ["nodejs_compat"]
 
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
+
 [vars]
 COMPANY_NAME = "New Route Chile"
 COMPANY_PHONE = "+56 2 2394 2153"
