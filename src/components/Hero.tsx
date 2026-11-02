@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Calendar, Users, MapPin, ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { COMPANY_INFO, IMAGES, SERVICES_TARIFFS } from '../data/newrouteData';
 
-// Asegúrate de que esta ruta sea la correcta para tu video
-import heroVideo from '../assets/videos/hero-bg.mp4';
+// ❌ ELIMINAMOS ESTA LÍNEA:
+// import heroVideo from '../assets/videos/hero-bg.mp4';
 
 interface HeroProps {
   onQuickBook: (serviceId?: string) => void;
@@ -29,16 +29,14 @@ export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
           muted
           playsInline
           poster={IMAGES.hero}
-          // 1. Subimos el brillo de 0.45 a 0.75 o 0.8
           className="w-full h-full object-cover object-center filter brightness-[0.75] scale-105"
         >
-          <source src={heroVideo} type="video/mp4" />
+          {/* ✅ CORRECCIÓN: Ruta directa al archivo en la carpeta public */}
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          {/* Nota: Si lo moviste directo a la raíz de public, usa src="/hero-bg.mp4" */}
         </video>
         
-        {/* 2. Suavizamos los gradientes oscuros */}
-        {/* El gradiente vertical se deja un poco para que el texto de abajo se lea bien */}
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/30 to-stone-950/40" />
-        {/* El gradiente de izquierda a derecha se reduce drásticamente para iluminar el video */}
         <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-950/30 to-transparent" />
       </div>
 
