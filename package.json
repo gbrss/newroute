@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "dev:astro": "astro dev --port 3000 --host 0.0.0.0",
-    "build": "vite build && astro build && node scripts/copy-assets.js",
+    "build": "vite build && astro build",
     "build:astro": "astro build",
     "build:vite": "vite build",
     "preview": "vite preview",
