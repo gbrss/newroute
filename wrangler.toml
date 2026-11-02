@@ -3,7 +3,7 @@ compatibility_date = "2026-10-31"
 compatibility_flags = ["nodejs_compat", "disable_nodejs_process_v2"]
 
 [assets]
-directory = "./dist/client"
+directory = "./dist"
 binding = "ASSETS"
 
 [vars]
