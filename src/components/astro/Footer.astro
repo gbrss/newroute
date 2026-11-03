@@ -4,15 +4,15 @@ import { COMPANY_INFO } from '../../data/newrouteData';
 import logoImg from '../../assets/images/logo.png';
 ---
 
-<footer class="bg-[#0a0a0a] text-stone-400 border-t border-stone-800 text-xs">
+<!-- CAMBIO: Agregamos pb-28 en móvil para dejar espacio al botón de WhatsApp -->
+<footer class="bg-[#0a0a0a] text-stone-400 border-t border-stone-800 text-xs pb-28 sm:pb-0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
       
       <!-- Brand & History -->
       <div class="lg:col-span-5 space-y-5">
-        <!-- Bloque del Logo idéntico al original -->
         <div class="flex items-center gap-3">
-          <img src={logoImg.src} alt="New Route Chile Logo" class="h-18 w-auto object-contain" /> 
+          <img src={logoImg.src} alt="New Route Chile Logo" class="h-14 sm:h-18 w-auto object-contain" /> 
         </div>
 
         <p class="text-stone-400 text-xs leading-relaxed max-w-sm">
@@ -20,7 +20,6 @@ import logoImg from '../../assets/images/logo.png';
         </p>
 
         <div class="pt-2">
-          <!-- 1. Agregamos el ID al botón -->
           <button
             id="footer-booking-btn"
             class="inline-block px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors cursor-pointer"
@@ -95,13 +94,3 @@ import logoImg from '../../assets/images/logo.png';
     </div>
   </div>
 </footer>
-
-<script>
-  // 2. Script para abrir el modal al hacer clic en el botón del Footer
-  const footerBookingBtn = document.getElementById('footer-booking-btn');
-  if (footerBookingBtn) {
-    footerBookingBtn.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('open-booking-modal'));
-    });
-  }
-</script>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Lock, ShieldCheck, LogOut, Calendar, MessageSquare, DollarSign,
+  ShieldCheck, LogOut, Calendar, MessageSquare, DollarSign,
   Download, Search, Filter, CheckCircle, AlertCircle, Trash2,
   MessageCircle, Tag, FileCode, ArrowLeft, KeyRound, Eye,
   EyeOff, CalendarPlus, Plus, Edit, Upload, X, Loader2, Sun, Moon,
-  LifeBuoy // <-- NUEVO ICONO DE SOPORTE
+  LifeBuoy
 } from 'lucide-react';
 import ImageKit from 'imagekit-javascript';
 import { BookingRequest, ContactMessage, ServiceTariff, BookingStatus, ServiceCategory } from '../../types';
@@ -42,7 +42,6 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
   const [contacts, setContacts] = useState<ContactMessage[]>(initialContacts);
   const [tariffs, setTariffs] = useState<ServiceTariff[]>(initialTariffs);
 
-  // CAMBIAMOS 'cloudflare' POR 'soporte'
   const [activeTab, setActiveTab] = useState<'reservas' | 'contactos' | 'tarifas' | 'soporte'>('reservas');
   const [statusFilter, setStatusFilter] = useState<string>('todos');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -79,7 +78,7 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = isAuthenticated ? 'Panel de Gerencia | New Route Chile' : 'Acceso Restringido | New Route Chile';
+      document.title = isAuthenticated ? 'Panel de Gerencia | New Route Chile' : 'Iniciar Sesión | New Route Chile';
     }
   }, [isAuthenticated]);
 
@@ -315,13 +314,13 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-stone-950 flex flex-col justify-center items-center p-4 selection:bg-amber-800 selection:text-white">
-        <div className="w-full max-w-md bg-stone-900 border border-stone-800 rounded-2xl p-8 shadow-2xl relative">
+      <div className="min-h-[100dvh] w-screen overflow-hidden bg-stone-950 flex flex-col justify-center items-center p-4 selection:bg-amber-800 selection:text-white overflow-y-auto">
+        <div className="w-full max-w-md bg-stone-900 border border-stone-800 rounded-2xl p-8 shadow-2xl relative my-auto">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-              <Lock className="w-7 h-7" />
+            <div className="mx-auto mb-4 flex justify-center">
+              <img src={logoImg.src} alt="New Route Chile" className="h-20 w-auto object-contain" />
             </div>
-            <span className="text-[11px] font-semibold tracking-wider text-amber-400 uppercase">Acceso Restringido</span>
+            <span className="text-[11px] font-semibold tracking-wider text-amber-400 uppercase">Iniciar Sesión</span>
             <h1 className="text-2xl font-bold font-display text-white mt-1">Portal de Gerencia</h1>
           </div>
           {loginError && (
@@ -357,32 +356,40 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
 
   return (
     <div className="min-h-screen bg-stone-100 dark:bg-stone-950 flex flex-col font-sans selection:bg-amber-800 selection:text-white transition-colors duration-300">
+      
+      {/* Estilos para ocultar scrollbars */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       <header className="bg-stone-900 text-white border-b border-stone-800 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
           <div className="flex items-center gap-3">
-            <img src={logoImg.src} alt="New Route Logo" className="h-18 w-auto object-contain" />
-            <div>
+            <img src={logoImg.src} alt="New Route Logo" className="h-18 sm:h-18 w-auto object-contain" />
+            <div className="hidden sm:block">
               <span className="font-bold text-base font-display text-white">GERENCIA & OPERACIONES</span>
               <p className="text-[11px] text-stone-400 font-light">New Route Chile · Central de Despacho 24/7</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-4">
-            <button onClick={toggleDarkMode} className="p-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors" title="Cambiar tema">
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            <button onClick={toggleDarkMode} className="p-1.5 sm:p-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors" title="Cambiar tema">
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <a href="/" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium transition-colors">
+            
+            <a href="/" className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-[11px] sm:text-xs font-medium transition-colors">
               <ArrowLeft className="w-3.5 h-3.5" /> Ver Web
             </a>
-            <button onClick={handleLogout} className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors">
+            
+            <button onClick={handleLogout} className="flex items-center gap-1 px-2 py-1.5 sm:px-3.5 sm:py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] sm:text-xs font-bold transition-colors">
               <LogOut className="w-3.5 h-3.5" /> Salir
             </button>
           </div>
         </div>
       </header>
 
-      {/* KPIs - Estilo exacto */}
       <section className="bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 px-4 sm:px-8 py-4 transition-colors duration-300">
         <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-50/70 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/50">
@@ -404,19 +411,35 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
         </div>
       </section>
 
-      {/* Tabs */}
+      {/* SECCIÓN DE PESTAÑAS OPTIMIZADA */}
       <section className="bg-stone-100 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-4 sm:px-8 pt-3 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 overflow-x-auto">
-            <button onClick={() => setActiveTab('reservas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'reservas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Calendar className="w-3.5 h-3.5" /> Solicitudes de Reservas ({bookings.length})</button>
-            <button onClick={() => setActiveTab('contactos')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'contactos' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><MessageSquare className="w-3.5 h-3.5" /> Mensajes de Contacto ({contacts.length})</button>
-            <button onClick={() => setActiveTab('tarifas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'tarifas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Tag className="w-3.5 h-3.5" /> Tarifario ({tariffs.length})</button>
-            {/* CAMBIAMOS EL NOMBRE Y EL ICONO DE LA PESTAÑA */}
-            <button onClick={() => setActiveTab('soporte')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'soporte' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><LifeBuoy className="w-3.5 h-3.5" /> Soporte Técnico</button>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between">
+          
+          {/* VISTA MÓVIL: SELECTOR DESPLEGABLE (Elimina el scroll) */}
+          <div className="w-full sm:hidden pb-3">
+            <select
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value as any)}
+              className="w-full bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-lg p-2.5 text-xs font-bold text-stone-900 dark:text-white shadow-sm focus:outline-none focus:border-amber-500"
+            >
+              <option value="reservas">📅 Solicitudes de Reservas ({bookings.length})</option>
+              <option value="contactos">💬 Mensajes de Contacto ({contacts.length})</option>
+              <option value="tarifas">🏷️ Tarifario ({tariffs.length})</option>
+              <option value="soporte">🆘 Soporte Técnico</option>
+            </select>
           </div>
+
+          {/* VISTA ESCRITORIO: PESTAÑAS CLÁSICAS */}
+          <div className="hidden sm:flex items-center gap-2 w-full sm:w-auto overflow-x-auto no-scrollbar">
+            <button onClick={() => setActiveTab('reservas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'reservas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Calendar className="w-3.5 h-3.5" /> Reservas ({bookings.length})</button>
+            <button onClick={() => setActiveTab('contactos')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'contactos' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><MessageSquare className="w-3.5 h-3.5" /> Contactos ({contacts.length})</button>
+            <button onClick={() => setActiveTab('tarifas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'tarifas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Tag className="w-3.5 h-3.5" /> Tarifas ({tariffs.length})</button>
+            <button onClick={() => setActiveTab('soporte')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'soporte' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><LifeBuoy className="w-3.5 h-3.5" /> Soporte</button>
+          </div>
+
           {activeTab === 'reservas' && (
-            <div className="flex items-center gap-2 mb-2">
-              <button onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm"><CalendarPlus className="w-3.5 h-3.5" /> Reservar</button>
+            <div className="hidden sm:flex items-center gap-2 mb-2">
+              <button onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm"><CalendarPlus className="w-3.5 h-3.5" /> Nueva Reserva</button>
               <button onClick={() => exportBookingsToCSV(bookings)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 dark:bg-black hover:bg-stone-800 text-white text-xs font-medium"><Download className="w-3.5 h-3.5 text-amber-400" /> Exportar</button>
             </div>
           )}
@@ -426,18 +449,27 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
       <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-8">
         {activeTab === 'reservas' && (
           <div className="space-y-6">
+            
+            <div className="flex sm:hidden items-center gap-2 w-full">
+              <button onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm"><CalendarPlus className="w-4 h-4" /> Nueva Reserva</button>
+              <button onClick={() => exportBookingsToCSV(bookings)} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-stone-900 dark:bg-black hover:bg-stone-800 text-white text-xs font-medium"><Download className="w-4 h-4 text-amber-400" /> Exportar</button>
+            </div>
+
             <div className="bg-white dark:bg-stone-900 p-4 rounded-2xl border border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
               <div className="relative w-full sm:w-96">
                 <Search className="w-4 h-4 absolute left-3 top-3 text-stone-400" />
                 <input type="text" placeholder="Buscar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 rounded-xl text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 transition-colors" />
               </div>
-              <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
+              
+              {/* FILTROS OPTIMIZADOS PARA MÓVIL (Flex-wrap en lugar de scroll) */}
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <Filter className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" /><span className="text-xs text-stone-500 dark:text-stone-400">Filtrar:</span>
                 {['todos', 'pendiente', 'confirmada', 'en_curso', 'completada', 'cancelada'].map((st) => (
                   <button key={st} onClick={() => setStatusFilter(st)} className={`px-3 py-1.5 text-xs rounded-lg capitalize ${statusFilter === st ? 'bg-stone-900 dark:bg-amber-500 text-white dark:text-stone-950 shadow-sm' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'}`}>{st}</button>
                 ))}
               </div>
             </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               <div className={`space-y-3 ${selectedBooking ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
                 {filteredBookings.map((b) => (
@@ -497,7 +529,7 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2"><strong className="text-stone-900 dark:text-white text-sm font-display">{c.name}</strong><span className="text-stone-400">·</span><span className="text-stone-500 dark:text-stone-400">{new Date(c.createdAt).toLocaleString('es-CL')}</span></div>
                       <div className="flex items-center gap-2">
-                        <button onClick={() => handleToggleContactRead(c.id, c.read)} className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white text-[11px] underline cursor-pointer">{c.read ? 'Marcar como no leído' : 'Marcar como leído'}</button>
+                        <button onClick={() => handleToggleContactRead(c.id, c.read)} className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white text-[11px] underline cursor-pointer">{c.read ? 'Marcar no leído' : 'Marcar leído'}</button>
                         <button onClick={() => handleDeleteContact(c.id)} className="text-rose-500 dark:text-rose-400 hover:text-rose-700 p-1 cursor-pointer"><Trash2 className="w-3.5 h-3.5" /></button>
                       </div>
                     </div>
@@ -506,7 +538,7 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
                     <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-400">
                       <span>📧 {c.email}</span>
                       {c.phone && <span>📞 {c.phone}</span>}
-                      {c.phone && (<a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1"><MessageCircle className="w-3.5 h-3.5" /><span>Responder por WhatsApp</span></a>)}
+                      {c.phone && (<a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1"><MessageCircle className="w-3.5 h-3.5" /><span>Responder WhatsApp</span></a>)}
                     </div>
                   </div>
                 ))}
@@ -517,9 +549,9 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
 
         {activeTab === 'tarifas' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-xs text-stone-500 dark:text-stone-400">Tarifas oficiales fijadas en pesos chilenos (CLP) para el servicio hotelero y turístico.</div>
-              <button onClick={() => handleOpenTariffModal()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-stone-900 dark:bg-amber-500 hover:bg-stone-800 dark:hover:bg-amber-400 text-white dark:text-stone-950 text-xs font-bold transition-colors shadow-sm"><Plus className="w-4 h-4 text-amber-400 dark:text-stone-950" /> Agregar Servicio</button>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <div className="text-xs text-stone-500 dark:text-stone-400">Tarifas oficiales en pesos chilenos (CLP).</div>
+              <button onClick={() => handleOpenTariffModal()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-stone-900 dark:bg-amber-500 hover:bg-stone-800 dark:hover:bg-amber-400 text-white dark:text-stone-950 text-xs font-bold transition-colors shadow-sm w-full sm:w-auto justify-center"><Plus className="w-4 h-4 text-amber-400 dark:text-stone-950" /> Agregar Servicio</button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {tariffs.map((t) => (
@@ -557,18 +589,17 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
           </div>
         )}
 
-        {/* PESTAÑA DE SOPORTE TÉCNICO */}
         {activeTab === 'soporte' && (
-          <div className="max-w-2xl mx-auto mt-12 bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 p-8 sm:p-12 shadow-sm text-center transition-colors duration-300">
-            <div className="w-20 h-20 mx-auto bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400 mb-6 shadow-inner">
-              <LifeBuoy className="w-10 h-10" />
+          <div className="max-w-2xl mx-auto mt-4 sm:mt-12 bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 p-6 sm:p-12 shadow-sm text-center transition-colors duration-300">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4 sm:mb-6 shadow-inner">
+              <LifeBuoy className="w-8 h-8 sm:w-10 sm:h-10" />
             </div>
             
-            <h2 className="text-2xl font-bold font-display text-stone-900 dark:text-white mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold font-display text-stone-900 dark:text-white mb-2 sm:mb-3">
               Soporte Técnico Web
             </h2>
             
-            <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed mb-8 max-w-lg mx-auto">
+            <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto">
               ¿Experimentas algún problema con el sitio web, el panel de administración o el sistema de reservas? 
               Contáctame directamente para resolverlo lo antes posible.
             </p>
@@ -577,14 +608,14 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
               href={`https://wa.me/56945422388?text=${encodeURIComponent('Hola, necesito soporte técnico para el sitio web de New Route Chile.')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition-all transform hover:scale-105"
+              className="inline-flex items-center justify-center w-full sm:w-auto gap-2 sm:gap-3 px-4 py-3 sm:px-8 sm:py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-600/20 transition-all transform hover:scale-105"
             >
-              <MessageCircle className="w-5 h-5" />
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Contactar a Soporte (+56 9 4542 2388)</span>
             </a>
 
-            <div className="mt-8 pt-6 border-t border-stone-200 dark:border-stone-800">
-              <p className="text-xs text-stone-500 dark:text-stone-400">
+            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-stone-200 dark:border-stone-800">
+              <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400">
                 Servicio disponible para reportar errores, solicitar mejoras o resolver dudas técnicas.
               </p>
             </div>

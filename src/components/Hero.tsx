@@ -72,7 +72,7 @@ export const Hero: React.FC<HeroProps> = () => {
 
             <div className="flex flex-wrap items-center gap-3 pt-4">
               <a
-                href="#servicios"
+                href="servicios"
                 className="px-5 py-3 rounded-lg bg-stone-800/80 hover:bg-stone-700 backdrop-blur-sm text-stone-200 font-medium text-xs border border-stone-600 transition-colors"
               >
                 Ver Todas las Tarifas Oficiales

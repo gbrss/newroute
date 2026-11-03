@@ -55,7 +55,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   } else if (passengersGroup === '4-6') {
     estimatedPrice = currentService.price4to6;
   } else {
-    // Usa el precio 7+ si está definido, si no, calcula 40% extra
     estimatedPrice = currentService.price7plus || Math.round(currentService.price4to6 * 1.4);
   }
 
@@ -131,9 +130,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const isGerencia = typeof window !== 'undefined' && window.location.pathname === '/gerencia';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/80 backdrop-blur-sm overflow-hidden">
+    // Cambiamos el padding exterior para móvil (p-2 en vez de p-3)
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-stone-950/80 backdrop-blur-sm overflow-hidden">
       
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-stone-200 flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+      {/* CAMBIO CLAVE: usamos max-h-[90dvh] en móvil en lugar de 95vh */}
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-stone-200 flex flex-col max-h-[90dvh] sm:max-h-[90vh]">
         
         <div className="bg-stone-900 text-white px-6 py-4 sm:py-5 flex items-center justify-between shrink-0 rounded-t-2xl">
           <div>

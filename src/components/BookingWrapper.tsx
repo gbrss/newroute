@@ -1,3 +1,4 @@
+// src/components/BookingWrapper.tsx
 import React, { useState, useEffect } from 'react';
 import { BookingModal } from './BookingModal';
 import { getStoredTariffs } from '../lib/storage';
@@ -9,11 +10,26 @@ export const BookingWrapper: React.FC = () => {
   const [preselectedId, setPreselectedId] = useState<string | undefined>(undefined);
   const [tariffs, setTariffs] = useState<ServiceTariff[]>(SERVICES_TARIFFS);
 
+  // --- EFECTO ACTUALIZADO PARA BLOQUEAR EL SCROLL ---
   useEffect(() => {
-    // Cargar datos iniciales
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden'; // <-- BLOQUEA EL SCROLL
+    } else {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';       // <-- RESTAURA EL SCROLL
+    }
+    
+    // Limpieza por si el componente se desmonta
+    return () => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     setTariffs(getStoredTariffs());
 
-    // Función para recargar cuando haya cambios desde el panel de gerencia
     const handleUpdate = () => {
       setTariffs(getStoredTariffs());
     };
@@ -24,7 +40,6 @@ export const BookingWrapper: React.FC = () => {
     });
 
     const handleOpenModal = (e: Event) => {
-      // CORRECCIÓN AQUÍ: Forzamos la lectura del localStorage cada vez que se abre el modal
       setTariffs(getStoredTariffs()); 
       
       const customEvent = e as CustomEvent;
@@ -41,8 +56,6 @@ export const BookingWrapper: React.FC = () => {
     return () => {
       window.removeEventListener('tariffs-updated', handleUpdate);
       window.removeEventListener('open-booking-modal', handleOpenModal);
-      // Nota: El removeEventListener de 'storage' se omite en este snippet por brevedad, 
-      // pero es buena práctica incluirlo si usas una función nombrada.
     };
   }, []);
 
