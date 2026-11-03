@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import {
-  ShieldCheck, LogOut, Calendar, MessageSquare, DollarSign,
-  Download, Search, Filter, CheckCircle, AlertCircle, Trash2,
-  MessageCircle, Tag, FileCode, ArrowLeft, KeyRound, Eye,
-  EyeOff, CalendarPlus, Plus, Edit, Upload, X, Loader2, Sun, Moon,
-  LifeBuoy
-} from 'lucide-react';
 import ImageKit from 'imagekit-javascript';
-import { BookingRequest, ContactMessage, ServiceTariff, BookingStatus, ServiceCategory } from '../../types';
+import { BookingRequest, ContactMessage, ServiceTariff, BookingStatus } from '../../types';
 import {
   updateBookingStatus, deleteBooking, markContactRead, deleteContactMessage,
-  formatCLP, exportBookingsToCSV, getStoredTariffs, saveTariff, deleteTariff
+  exportBookingsToCSV, getStoredTariffs, saveTariff, deleteTariff
 } from '../../lib/storage';
 
-import logoImg from '../../assets/images/logo.png';
+// Importación de los componentes
+import { GerenciaLogin } from '../gerencia/GerenciaLogin';
+import { GerenciaHeader } from '../gerencia/GerenciaHeader';
+import { GerenciaKpis } from '../gerencia/GerenciaKpis';
+import { GerenciaTabs } from '../gerencia/GerenciaTabs';
+import { TabBookings } from '../gerencia/TabBookings';
+import { TabContacts } from '../gerencia/TabContacts';
+import { TabTariffs } from '../gerencia/TabTariffs';
+import { TabSupport } from '../gerencia/TabSupport';
+import { TariffModal } from '../gerencia/TariffModal';
 
 interface GerenciaPageProps {
   bookings: BookingRequest[];
@@ -314,369 +316,66 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[100dvh] w-screen overflow-hidden bg-stone-950 flex flex-col justify-center items-center p-4 selection:bg-amber-800 selection:text-white overflow-y-auto">
-        <div className="w-full max-w-md bg-stone-900 border border-stone-800 rounded-2xl p-8 shadow-2xl relative my-auto">
-          <div className="text-center mb-8">
-            <div className="mx-auto mb-4 flex justify-center">
-              <img src={logoImg.src} alt="New Route Chile" className="h-20 w-auto object-contain" />
-            </div>
-            <span className="text-[11px] font-semibold tracking-wider text-amber-400 uppercase">Iniciar Sesión</span>
-            <h1 className="text-2xl font-bold font-display text-white mt-1">Portal de Gerencia</h1>
-          </div>
-          {loginError && (
-            <div className="mb-5 p-3 rounded-lg bg-rose-950/60 border border-rose-800/80 text-rose-300 text-xs font-medium flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" /><span>{loginError}</span>
-            </div>
-          )}
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-stone-300 mb-1.5">Usuario</label>
-              <input type="text" required autoFocus placeholder="gerencia" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-amber-500" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-stone-300 mb-1.5">Contraseña</label>
-              <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} required placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-stone-950 border border-stone-800 rounded-lg pl-3.5 pr-10 py-2.5 text-xs text-white focus:border-amber-500" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-2.5 text-stone-500 hover:text-stone-300">
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-            <button type="submit" className="w-full py-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase flex items-center justify-center gap-2 mt-2">
-              <KeyRound className="w-4 h-4" /><span>Ingresar</span>
-            </button>
-          </form>
-          <div className="mt-6 text-center">
-            <a href="/" className="inline-flex items-center gap-1.5 text-xs text-stone-400 hover:text-white"><ArrowLeft className="w-3.5 h-3.5" /> Volver a la web</a>
-          </div>
-        </div>
-      </div>
+      <GerenciaLogin
+        username={username} setUsername={setUsername}
+        password={password} setPassword={setPassword}
+        showPassword={showPassword} setShowPassword={setShowPassword}
+        handleLogin={handleLogin} loginError={loginError}
+      />
     );
   }
 
   return (
     <div className="min-h-screen bg-stone-100 dark:bg-stone-950 flex flex-col font-sans selection:bg-amber-800 selection:text-white transition-colors duration-300">
-      
-      {/* Estilos para ocultar scrollbars */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      <header className="bg-stone-900 text-white border-b border-stone-800 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          
-          <div className="flex items-center gap-3">
-            <img src={logoImg.src} alt="New Route Logo" className="h-18 sm:h-18 w-auto object-contain" />
-            <div className="hidden sm:block">
-              <span className="font-bold text-base font-display text-white">GERENCIA & OPERACIONES</span>
-              <p className="text-[11px] text-stone-400 font-light">New Route Chile · Central de Despacho 24/7</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            <button onClick={toggleDarkMode} className="p-1.5 sm:p-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors" title="Cambiar tema">
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            
-            <a href="/" className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-[11px] sm:text-xs font-medium transition-colors">
-              <ArrowLeft className="w-3.5 h-3.5" /> Ver Web
-            </a>
-            
-            <button onClick={handleLogout} className="flex items-center gap-1 px-2 py-1.5 sm:px-3.5 sm:py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] sm:text-xs font-bold transition-colors">
-              <LogOut className="w-3.5 h-3.5" /> Salir
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <section className="bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 px-4 sm:px-8 py-4 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-50/70 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/50">
-            <div className="p-2.5 rounded-lg bg-amber-500 text-stone-950"><AlertCircle className="w-5 h-5" /></div>
-            <div><div className="text-stone-500 dark:text-stone-400 text-[11px]">Por Confirmar</div><div className="text-lg font-bold text-stone-900 dark:text-white font-display">{pendingCount} reservas</div></div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/50">
-            <div className="p-2.5 rounded-lg bg-emerald-600 text-white"><CheckCircle className="w-5 h-5" /></div>
-            <div><div className="text-stone-500 dark:text-stone-400 text-[11px]">Confirmadas</div><div className="text-lg font-bold text-stone-900 dark:text-white font-display">{confirmedCount} reservas</div></div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/70 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/50">
-            <div className="p-2.5 rounded-lg bg-blue-600 text-white"><MessageSquare className="w-5 h-5" /></div>
-            <div><div className="text-stone-500 dark:text-stone-400 text-[11px]">Mensajes Nuevos</div><div className="text-lg font-bold text-stone-900 dark:text-white font-display">{unreadContactsCount} contactos</div></div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-            <div className="p-2.5 rounded-lg bg-stone-900 dark:bg-black text-amber-400"><DollarSign className="w-5 h-5" /></div>
-            <div><div className="text-stone-500 dark:text-stone-400 text-[11px]">Total Estimado</div><div className="text-lg font-bold text-amber-800 dark:text-amber-400 font-display">{formatCLP(totalRevenue)}</div></div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECCIÓN DE PESTAÑAS OPTIMIZADA */}
-      <section className="bg-stone-100 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 px-4 sm:px-8 pt-3 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between">
-          
-          {/* VISTA MÓVIL: SELECTOR DESPLEGABLE (Elimina el scroll) */}
-          <div className="w-full sm:hidden pb-3">
-            <select
-              value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value as any)}
-              className="w-full bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-lg p-2.5 text-xs font-bold text-stone-900 dark:text-white shadow-sm focus:outline-none focus:border-amber-500"
-            >
-              <option value="reservas">📅 Solicitudes de Reservas ({bookings.length})</option>
-              <option value="contactos">💬 Mensajes de Contacto ({contacts.length})</option>
-              <option value="tarifas">🏷️ Tarifario ({tariffs.length})</option>
-              <option value="soporte">🆘 Soporte Técnico</option>
-            </select>
-          </div>
-
-          {/* VISTA ESCRITORIO: PESTAÑAS CLÁSICAS */}
-          <div className="hidden sm:flex items-center gap-2 w-full sm:w-auto overflow-x-auto no-scrollbar">
-            <button onClick={() => setActiveTab('reservas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'reservas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Calendar className="w-3.5 h-3.5" /> Reservas ({bookings.length})</button>
-            <button onClick={() => setActiveTab('contactos')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'contactos' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><MessageSquare className="w-3.5 h-3.5" /> Contactos ({contacts.length})</button>
-            <button onClick={() => setActiveTab('tarifas')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'tarifas' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><Tag className="w-3.5 h-3.5" /> Tarifas ({tariffs.length})</button>
-            <button onClick={() => setActiveTab('soporte')} className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === 'soporte' ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white border-t-2 border-amber-600 shadow-sm' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}><LifeBuoy className="w-3.5 h-3.5" /> Soporte</button>
-          </div>
-
-          {activeTab === 'reservas' && (
-            <div className="hidden sm:flex items-center gap-2 mb-2">
-              <button onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm"><CalendarPlus className="w-3.5 h-3.5" /> Nueva Reserva</button>
-              <button onClick={() => exportBookingsToCSV(bookings)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 dark:bg-black hover:bg-stone-800 text-white text-xs font-medium"><Download className="w-3.5 h-3.5 text-amber-400" /> Exportar</button>
-            </div>
-          )}
-        </div>
-      </section>
+      <GerenciaHeader isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} handleLogout={handleLogout} />
+      
+      <GerenciaKpis pendingCount={pendingCount} confirmedCount={confirmedCount} unreadContactsCount={unreadContactsCount} totalRevenue={totalRevenue} />
+      
+      <GerenciaTabs 
+        activeTab={activeTab} setActiveTab={setActiveTab} 
+        bookingsCount={bookings.length} contactsCount={contacts.length} tariffsCount={tariffs.length}
+        onOpenBookingModal={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))}
+        onExport={() => exportBookingsToCSV(bookings)}
+      />
 
       <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-8">
         {activeTab === 'reservas' && (
-          <div className="space-y-6">
-            
-            <div className="flex sm:hidden items-center gap-2 w-full">
-              <button onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm"><CalendarPlus className="w-4 h-4" /> Nueva Reserva</button>
-              <button onClick={() => exportBookingsToCSV(bookings)} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-stone-900 dark:bg-black hover:bg-stone-800 text-white text-xs font-medium"><Download className="w-4 h-4 text-amber-400" /> Exportar</button>
-            </div>
-
-            <div className="bg-white dark:bg-stone-900 p-4 rounded-2xl border border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
-              <div className="relative w-full sm:w-96">
-                <Search className="w-4 h-4 absolute left-3 top-3 text-stone-400" />
-                <input type="text" placeholder="Buscar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2.5 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 rounded-xl text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 transition-colors" />
-              </div>
-              
-              {/* FILTROS OPTIMIZADOS PARA MÓVIL (Flex-wrap en lugar de scroll) */}
-              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                <Filter className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" /><span className="text-xs text-stone-500 dark:text-stone-400">Filtrar:</span>
-                {['todos', 'pendiente', 'confirmada', 'en_curso', 'completada', 'cancelada'].map((st) => (
-                  <button key={st} onClick={() => setStatusFilter(st)} className={`px-3 py-1.5 text-xs rounded-lg capitalize ${statusFilter === st ? 'bg-stone-900 dark:bg-amber-500 text-white dark:text-stone-950 shadow-sm' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'}`}>{st}</button>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className={`space-y-3 ${selectedBooking ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
-                {filteredBookings.map((b) => (
-                  <div key={b.id} onClick={() => handleSelectBooking(b)} className={`p-5 rounded-2xl border text-xs cursor-pointer transition-all bg-white dark:bg-stone-900 ${selectedBooking?.id === b.id ? 'border-amber-500 shadow-md ring-1 ring-amber-500' : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-sm'}`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2"><span className="font-mono font-bold text-stone-900 dark:text-white text-xs">{b.referenceCode}</span><span className="text-stone-400">·</span><span className="text-stone-500 dark:text-stone-400">{new Date(b.createdAt).toLocaleDateString('es-CL')}</span></div>
-                      {getStatusBadge(b.status)}
-                    </div>
-                    <div className="font-bold text-stone-900 dark:text-white text-base">{b.customerName}</div>
-                    <div className="text-amber-800 dark:text-amber-400 font-semibold">{b.serviceName}</div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3 pt-3 border-t border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-300">
-                      <div>📅 <strong>{b.date}</strong> ({b.time} hrs)</div>
-                      <div>👥 <strong>{b.passengers} pax</strong> ({b.luggageCount} maletas)</div>
-                      <div className="font-bold text-amber-900 dark:text-amber-400 font-display text-right sm:text-left">{formatCLP(b.totalEstimatedPrice)}</div>
-                    </div>
-                    {b.assignedDriver && (
-                      <div className="mt-2.5 text-[11px] text-emerald-800 dark:text-emerald-300 font-medium bg-emerald-50 dark:bg-emerald-900/20 p-2 rounded-lg border border-emerald-200 dark:border-emerald-900/50">🚗 Conductor Asignado: {b.assignedDriver}</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {selectedBooking && (
-                <div className="lg:col-span-5 bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 p-6 text-xs space-y-4 shadow-sm sticky top-24">
-                  <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
-                    <div><div className="text-[11px] text-stone-500 dark:text-stone-400">Solicitud Seleccionada</div><div className="font-mono font-bold text-base text-stone-900 dark:text-white">{selectedBooking.referenceCode}</div></div>
-                    <button onClick={() => setSelectedBooking(null)} className="text-stone-400 hover:text-stone-700 dark:hover:text-white p-1 text-xs underline cursor-pointer">Cerrar</button>
-                  </div>
-                  <div className="space-y-2.5 text-stone-700 dark:text-stone-300">
-                    <div><span className="text-stone-500 dark:text-stone-400 block">Servicio Solicitado:</span><strong className="text-stone-900 dark:text-white text-sm">{selectedBooking.serviceName}</strong></div>
-                    <div className="grid grid-cols-2 gap-2"><div><span className="text-stone-500 dark:text-stone-400 block">Fecha & Hora:</span><strong className="text-stone-900 dark:text-white">{selectedBooking.date} a las {selectedBooking.time} hrs</strong></div><div><span className="text-stone-500 dark:text-stone-400 block">Pasajeros:</span><strong className="text-stone-900 dark:text-white">{selectedBooking.passengers} personas</strong></div></div>
-                    <div><span className="text-stone-500 dark:text-stone-400 block">Origen:</span><div className="p-2.5 bg-stone-50 dark:bg-stone-950 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-medium">{selectedBooking.pickupAddress}</div></div>
-                    <div className="pt-2 border-t border-stone-200 dark:border-stone-800"><span className="text-stone-500 dark:text-stone-400 block">Pasajero:</span><div className="font-bold text-stone-900 dark:text-white">{selectedBooking.customerName}</div><div>Email: {selectedBooking.customerEmail}</div><div>Teléfono: {selectedBooking.customerPhone}</div></div>
-                  </div>
-                  <div className="pt-3 border-t border-stone-200 dark:border-stone-800 space-y-3">
-                    <div><label className="block text-[11px] font-bold text-stone-700 dark:text-stone-300 mb-1">Estado Operativo:</label><div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">{(['pendiente', 'confirmada', 'en_curso', 'completada', 'cancelada'] as BookingStatus[]).map((st) => (<button key={st} onClick={() => handleUpdateStatus(selectedBooking.id, st)} className={`py-1.5 px-2 rounded-lg text-[11px] font-medium capitalize cursor-pointer transition-colors ${selectedBooking.status === st ? 'bg-amber-600 text-white font-bold' : 'bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'}`}>{st}</button>))}</div></div>
-                    <div><label className="block text-[11px] font-bold text-stone-700 dark:text-stone-300 mb-1">Asignar Móvil / Conductor:</label><input type="text" value={driverInput} onChange={(e) => setDriverInput(e.target.value)} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 transition-colors" /></div>
-                    <div><label className="block text-[11px] font-bold text-stone-700 dark:text-stone-300 mb-1">Notas Internas de Despacho:</label><textarea rows={2} value={notesInput} onChange={(e) => setNotesInput(e.target.value)} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-600 transition-colors" /></div>
-                    <button onClick={handleSaveNotes} className="w-full py-2.5 rounded-lg bg-stone-900 dark:bg-amber-500 hover:bg-stone-800 dark:hover:bg-amber-400 text-white dark:text-stone-950 font-bold text-xs cursor-pointer transition-colors">Guardar Asignación & Notas</button>
-                    <a href={buildClientWhatsAppMessage(selectedBooking)} target="_blank" rel="noopener noreferrer" className="w-full py-2.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"><MessageCircle className="w-4 h-4" /> Notificar al Pasajero vía WhatsApp</a>
-                    <button onClick={() => handleDeleteBooking(selectedBooking.id)} className="w-full py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors"><Trash2 className="w-3.5 h-3.5" /> Eliminar solicitud</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          <TabBookings
+            bookings={filteredBookings} statusFilter={statusFilter} setStatusFilter={setStatusFilter}
+            searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+            selectedBooking={selectedBooking} handleSelectBooking={handleSelectBooking} setSelectedBooking={setSelectedBooking}
+            driverInput={driverInput} setDriverInput={setDriverInput}
+            notesInput={notesInput} setNotesInput={setNotesInput}
+            handleUpdateStatus={handleUpdateStatus} handleSaveNotes={handleSaveNotes} handleDeleteBooking={handleDeleteBooking}
+            buildClientWhatsAppMessage={buildClientWhatsAppMessage}
+            onOpenBookingModal={() => window.dispatchEvent(new CustomEvent('open-booking-modal'))}
+            onExport={() => exportBookingsToCSV(bookings)}
+            getStatusBadge={getStatusBadge}
+          />
         )}
 
         {activeTab === 'contactos' && (
-          <div className="space-y-4">
-            <div className="text-xs text-stone-500 dark:text-stone-400 mb-2">Mensajes recibidos a través del formulario público.</div>
-            {contacts.length === 0 ? (
-              <div className="p-12 text-center bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 text-stone-500 dark:text-stone-400 text-xs">No hay mensajes en la bandeja de entrada.</div>
-            ) : (
-              <div className="space-y-3">
-                {contacts.map((c) => (
-                  <div key={c.id} className={`p-5 rounded-2xl border text-xs transition-colors bg-white dark:bg-stone-900 ${c.read ? 'border-stone-200 dark:border-stone-800' : 'border-amber-400 dark:border-amber-600 bg-amber-50/30 dark:bg-amber-900/10'}`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2"><strong className="text-stone-900 dark:text-white text-sm font-display">{c.name}</strong><span className="text-stone-400">·</span><span className="text-stone-500 dark:text-stone-400">{new Date(c.createdAt).toLocaleString('es-CL')}</span></div>
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => handleToggleContactRead(c.id, c.read)} className="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white text-[11px] underline cursor-pointer">{c.read ? 'Marcar no leído' : 'Marcar leído'}</button>
-                        <button onClick={() => handleDeleteContact(c.id)} className="text-rose-500 dark:text-rose-400 hover:text-rose-700 p-1 cursor-pointer"><Trash2 className="w-3.5 h-3.5" /></button>
-                      </div>
-                    </div>
-                    <div className="text-stone-800 dark:text-stone-200 font-bold mb-1.5">Asunto: {c.subject}</div>
-                    <div className="p-3.5 bg-stone-50 dark:bg-stone-950 rounded-xl border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 leading-relaxed">{c.message}</div>
-                    <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-400">
-                      <span>📧 {c.email}</span>
-                      {c.phone && <span>📞 {c.phone}</span>}
-                      {c.phone && (<a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1"><MessageCircle className="w-3.5 h-3.5" /><span>Responder WhatsApp</span></a>)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <TabContacts contacts={contacts} handleToggleContactRead={handleToggleContactRead} handleDeleteContact={handleDeleteContact} />
         )}
 
         {activeTab === 'tarifas' && (
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <div className="text-xs text-stone-500 dark:text-stone-400">Tarifas oficiales en pesos chilenos (CLP).</div>
-              <button onClick={() => handleOpenTariffModal()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-stone-900 dark:bg-amber-500 hover:bg-stone-800 dark:hover:bg-amber-400 text-white dark:text-stone-950 text-xs font-bold transition-colors shadow-sm w-full sm:w-auto justify-center"><Plus className="w-4 h-4 text-amber-400 dark:text-stone-950" /> Agregar Servicio</button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tariffs.map((t) => (
-                <div key={t.id} className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-xs flex flex-col justify-between group transition-colors duration-300">
-                  <div>
-                    {t.image && <img src={t.image} alt={t.name} className="w-full h-32 object-cover rounded-lg mb-3" />}
-                    <h4 className="font-bold text-sm font-display pr-2 text-stone-900 dark:text-white">{t.name}</h4>
-                    <p className="text-stone-500 dark:text-stone-400 text-[11px] mt-1">{t.subtitle}</p>
-                    <span className="inline-block mt-2 font-mono text-[10px] bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded uppercase text-stone-600 dark:text-stone-300">{t.category}</span>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-stone-600 dark:text-stone-300 line-clamp-2 mb-3">{t.description}</p>
-                    <div className="grid grid-cols-3 gap-1.5 pt-3 border-t border-stone-100 dark:border-stone-800">
-                      <div className="bg-stone-50 dark:bg-stone-950 p-2 rounded border border-stone-200 dark:border-stone-700 text-center">
-                        <span className="text-[9px] text-stone-500 dark:text-stone-400 block">1-3 PAX</span>
-                        <strong className="text-[11px] text-stone-900 dark:text-white">{formatCLP(t.price1to3)}</strong>
-                      </div>
-                      <div className="bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-200 dark:border-amber-900/50 text-center">
-                        <span className="text-[9px] text-amber-800 dark:text-amber-400 block">4-6 PAX</span>
-                        <strong className="text-[11px] text-amber-900 dark:text-amber-300">{formatCLP(t.price4to6)}</strong>
-                      </div>
-                      <div className="bg-stone-50 dark:bg-stone-950 p-2 rounded border border-stone-200 dark:border-stone-700 text-center">
-                        <span className="text-[9px] text-stone-500 dark:text-stone-400 block">7+ PAX</span>
-                        <strong className="text-[11px] text-stone-900 dark:text-white">{formatCLP(t.price7plus || Math.round(t.price4to6 * 1.4))}</strong>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 mt-4 pt-3 border-t border-stone-100 dark:border-stone-800">
-                      <button onClick={() => handleOpenTariffModal(t)} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 rounded-lg font-semibold transition-colors"><Edit className="w-3.5 h-3.5" /> Editar</button>
-                      <button onClick={() => handleDeleteTariff(t.id)} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-700 dark:text-rose-400 rounded-lg font-semibold transition-colors"><Trash2 className="w-3.5 h-3.5" /> Eliminar</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <TabTariffs tariffs={tariffs} handleOpenTariffModal={handleOpenTariffModal} handleDeleteTariff={handleDeleteTariff} />
         )}
 
-        {activeTab === 'soporte' && (
-          <div className="max-w-2xl mx-auto mt-4 sm:mt-12 bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 p-6 sm:p-12 shadow-sm text-center transition-colors duration-300">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4 sm:mb-6 shadow-inner">
-              <LifeBuoy className="w-8 h-8 sm:w-10 sm:h-10" />
-            </div>
-            
-            <h2 className="text-xl sm:text-2xl font-bold font-display text-stone-900 dark:text-white mb-2 sm:mb-3">
-              Soporte Técnico Web
-            </h2>
-            
-            <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto">
-              ¿Experimentas algún problema con el sitio web, el panel de administración o el sistema de reservas? 
-              Contáctame directamente para resolverlo lo antes posible.
-            </p>
-
-            <a
-              href={`https://wa.me/56945422388?text=${encodeURIComponent('Hola, necesito soporte técnico para el sitio web de New Route Chile.')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full sm:w-auto gap-2 sm:gap-3 px-4 py-3 sm:px-8 sm:py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-600/20 transition-all transform hover:scale-105"
-            >
-              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Contactar a Soporte (+56 9 4542 2388)</span>
-            </a>
-
-            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-stone-200 dark:border-stone-800">
-              <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400">
-                Servicio disponible para reportar errores, solicitar mejoras o resolver dudas técnicas.
-              </p>
-            </div>
-          </div>
-        )}
+        {activeTab === 'soporte' && <TabSupport />}
       </main>
 
-      {isTariffModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-2xl shadow-2xl my-8 transition-colors duration-300">
-            <div className="bg-stone-900 dark:bg-black px-6 py-4 flex justify-between rounded-t-2xl">
-              <h3 className="text-lg font-bold text-white">{editingTariff ? 'Editar Servicio' : 'Nuevo Servicio'}</h3>
-              <button onClick={() => setIsTariffModalOpen(false)} className="text-stone-400 hover:text-white"><X className="w-5 h-5" /></button>
-            </div>
-            <form onSubmit={handleSaveTariff} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Nombre *</label><input type="text" required value={tariffForm.name || ''} onChange={e => setTariffForm({...tariffForm, name: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-                <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Subtítulo</label><input type="text" value={tariffForm.subtitle || ''} onChange={e => setTariffForm({...tariffForm, subtitle: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-                <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Categoría</label><select value={tariffForm.category || 'aeropuerto'} onChange={e => setTariffForm({...tariffForm, category: e.target.value as ServiceCategory})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"><option value="aeropuerto">Aeropuerto</option><option value="vinos">Vinos</option><option value="ski">Ski</option><option value="termas">Termas</option><option value="city_tour">City Tour</option></select></div>
-                <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Duración</label><input type="text" placeholder="Ej: 7 horas" value={tariffForm.durationApprox || ''} onChange={e => setTariffForm({...tariffForm, durationApprox: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-              </div>
-              <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Descripción</label><textarea rows={2} value={tariffForm.description || ''} onChange={e => setTariffForm({...tariffForm, description: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 1-3 PAX</label>
-                  <input type="number" required value={tariffForm.price1to3 || 0} onChange={e => handlePrice1to3Change(parseInt(e.target.value) || 0)} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 4-6 PAX</label>
-                  <input type="number" required value={tariffForm.price4to6 || 0} onChange={e => setTariffForm({...tariffForm, price4to6: parseInt(e.target.value)})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 7+ PAX (VIP)</label>
-                  <input type="number" placeholder="Calculado automáticamente" value={tariffForm.price7plus || ''} onChange={e => setTariffForm({...tariffForm, price7plus: parseInt(e.target.value) || undefined})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-xs font-bold mb-1 dark:text-stone-300">Imagen del Servicio (ImageKit)</label>
-                <div className="flex items-center gap-4">
-                  {tariffForm.image && (
-                    <div className="w-16 h-16 rounded border border-stone-300 dark:border-stone-700 overflow-hidden shrink-0"><img src={tariffForm.image} alt="Preview" className="w-full h-full object-cover" /></div>
-                  )}
-                  <label className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer text-xs font-semibold transition-colors ${isUploading ? 'bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400' : 'bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border-stone-300 dark:border-stone-600'}`}>
-                    {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    <span>{isUploading ? 'Subiendo...' : 'Subir Imagen'}</span>
-                    <input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploading} className="hidden" />
-                  </label>
-                </div>
-                <p className="text-[10px] text-stone-500 dark:text-stone-400 mt-1">Tamaño máximo recomendado: 5MB. Formatos: JPG, PNG.</p>
-              </div>
-
-              <div className="pt-4 border-t border-stone-200 dark:border-stone-800 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsTariffModalOpen(false)} className="px-5 py-2.5 rounded-lg border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors">Cancelar</button>
-                <button type="submit" disabled={isUploading} className="px-5 py-2.5 rounded-lg bg-amber-500 disabled:opacity-50 text-stone-950 font-bold text-xs hover:bg-amber-400 transition-colors">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <TariffModal
+        isOpen={isTariffModalOpen} onClose={() => setIsTariffModalOpen(false)}
+        editingTariff={editingTariff} tariffForm={tariffForm} setTariffForm={setTariffForm}
+        handleSaveTariff={handleSaveTariff} handlePrice1to3Change={handlePrice1to3Change}
+        handleImageUpload={handleImageUpload} isUploading={isUploading}
+      />
     </div>
   );
 };
