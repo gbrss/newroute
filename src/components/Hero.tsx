@@ -1,20 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Users, MapPin, ArrowRight, ShieldCheck, Clock, Award } from 'lucide-react';
 import { COMPANY_INFO, IMAGES, SERVICES_TARIFFS } from '../data/newrouteData';
+import { getStoredTariffs } from '../lib/storage';
+import { ServiceTariff } from '../types';
 
 interface HeroProps {
-  // Ya no necesitamos props de funciones, usaremos eventos
+  onQuickBook?: (serviceId?: string) => void;
+  onOpenAstro?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = () => {
+export const Hero: React.FC<HeroProps> = ({ onQuickBook, onOpenAstro }) => {
+  const [tariffs, setTariffs] = useState<ServiceTariff[]>(SERVICES_TARIFFS);
   const [selectedService, setSelectedService] = useState('transfer-aeropuerto');
+
+  useEffect(() => {
+    // 1. Carga inicial
+    getStoredTariffs().then(data => {
+      if (data && data.length > 0) setTariffs(data);
+    });
+
+    // 2. Refresco automático cada 5 segundos (AJAX Polling)
+    const interval = setInterval(() => {
+      getStoredTariffs().then(data => {
+        if (data && data.length > 0) setTariffs(data);
+      });
+    }, 10000);
+
+    // 3. Escuchar si estamos en la misma pestaña
+    const handleUpdate = () => {
+      getStoredTariffs().then(data => {
+        if (data && data.length > 0) setTariffs(data);
+      });
+    };
+    window.addEventListener('tariffs-updated', handleUpdate);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('tariffs-updated', handleUpdate);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Disparamos el evento que abre el modal de reserva
-    window.dispatchEvent(new CustomEvent('open-booking-modal', { 
-      detail: { serviceId: selectedService } 
-    }));
+    if (onQuickBook) {
+      onQuickBook(selectedService);
+    } else {
+      window.dispatchEvent(new CustomEvent('open-booking-modal', { 
+        detail: { serviceId: selectedService } 
+      }));
+    }
   };
 
   return (
@@ -72,11 +106,20 @@ export const Hero: React.FC<HeroProps> = () => {
 
             <div className="flex flex-wrap items-center gap-3 pt-4">
               <a
-                href="servicios"
+                href="#servicios"
                 className="px-5 py-3 rounded-lg bg-stone-800/80 hover:bg-stone-700 backdrop-blur-sm text-stone-200 font-medium text-xs border border-stone-600 transition-colors"
               >
                 Ver Todas las Tarifas Oficiales
               </a>
+              {onOpenAstro && (
+                <button
+                  onClick={onOpenAstro}
+                  className="px-4 py-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 font-bold text-xs border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer backdrop-blur-sm"
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span>Código Astro JS & Cloudflare</span>
+                </button>
+              )}
               <a
                 href={`https://wa.me/${COMPANY_INFO.whatsappRaw}?text=${encodeURIComponent('Hola New Route Chile, deseo consultar disponibilidad para un traslado.')}`}
                 target="_blank"
@@ -113,7 +156,7 @@ export const Hero: React.FC<HeroProps> = () => {
                     onChange={(e) => setSelectedService(e.target.value)}
                     className="w-full bg-stone-950 border border-stone-800 rounded-lg px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-amber-500 transition-colors"
                   >
-                    {SERVICES_TARIFFS.map((s) => (
+                    {tariffs.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name}
                       </option>

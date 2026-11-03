@@ -4,22 +4,33 @@ import { getStoredTariffs, formatCLP } from '../lib/storage';
 import { SERVICES_TARIFFS } from '../data/newrouteData';
 import { Clock, Users, ArrowRight, Check, Sparkles } from 'lucide-react';
 
+// IMPORTAMOS LA IMAGEN POR DEFECTO
+import defaultServiceImg from '../assets/images/defaultService.png';
+
 export const ServicesAndRates: React.FC = () => {
   const [tariffs, setTariffs] = useState<ServiceTariff[]>(SERVICES_TARIFFS);
   const [activeCategory, setActiveCategory] = useState<ServiceCategory>('todos');
 
   useEffect(() => {
-    // Cargar datos iniciales
-    setTariffs(getStoredTariffs());
-
-    // Escuchar cambios desde el panel de gerencia
-    const handleUpdate = () => setTariffs(getStoredTariffs());
-    window.addEventListener('tariffs-updated', handleUpdate);
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'newroute_tariffs_v1') handleUpdate();
+    getStoredTariffs().then(data => {
+      if (data && data.length > 0) setTariffs(data);
     });
 
+    const interval = setInterval(() => {
+      getStoredTariffs().then(data => {
+        if (data && data.length > 0) setTariffs(data);
+      });
+    }, 5000);
+
+    const handleUpdate = () => {
+      getStoredTariffs().then(data => {
+        if (data && data.length > 0) setTariffs(data);
+      });
+    };
+    window.addEventListener('tariffs-updated', handleUpdate);
+
     return () => {
+      clearInterval(interval);
       window.removeEventListener('tariffs-updated', handleUpdate);
     };
   }, []);
@@ -40,7 +51,6 @@ export const ServicesAndRates: React.FC = () => {
   return (
     <section id="servicios" className="py-20 lg:py-28 bg-stone-100/70 border-b border-stone-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase text-amber-700 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
@@ -53,7 +63,6 @@ export const ServicesAndRates: React.FC = () => {
             Valores oficiales en pesos chilenos (CLP) para vehículos ejecutivos. Sin cargos sorpresa ni tarifas dinámicas ocultas.
           </p>
 
-          {/* Interactive Category Filter */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-8 p-1.5 bg-stone-200/80 rounded-xl max-w-2xl mx-auto">
             {categories.map((cat) => (
               <button
@@ -71,17 +80,16 @@ export const ServicesAndRates: React.FC = () => {
           </div>
         </div>
 
-        {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((item) => (
             <div
               key={item.id}
               className="bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
             >
-              {/* Card Image */}
               <div className="relative h-48 overflow-hidden bg-stone-900">
+                {/* AQUÍ USAMOS LA IMAGEN POR DEFECTO SI NO HAY IMAGEN */}
                 <img
-                  src={item.image}
+                  src={item.image || defaultServiceImg.src}
                   alt={item.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
@@ -100,7 +108,6 @@ export const ServicesAndRates: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card Body */}
               <div className="p-6 flex-1 flex flex-col">
                 <h3 className="text-lg font-bold font-display text-stone-900 leading-snug">
                   {item.name}
@@ -112,7 +119,6 @@ export const ServicesAndRates: React.FC = () => {
                   {item.description}
                 </p>
 
-                {/* Highlights List */}
                 <div className="my-4 pt-3 border-t border-stone-100 space-y-1.5 flex-1">
                   {item.highlights.slice(0, 3).map((h, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-stone-600">
@@ -122,7 +128,6 @@ export const ServicesAndRates: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Pricing Box - 3 Columnas */}
                 <div className="bg-stone-50 rounded-xl p-3.5 border border-stone-200 mb-4">
                   <div className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider mb-2">
                     Tarifa Oficial (CLP)
@@ -163,7 +168,6 @@ export const ServicesAndRates: React.FC = () => {
                   )}
                 </div>
 
-                {/* Booking Trigger Button */}
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent('open-booking-modal', { detail: { serviceId: item.id } }))}
                   className="w-full py-2.5 px-4 rounded-lg bg-stone-900 hover:bg-amber-500 hover:text-stone-950 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
@@ -176,7 +180,6 @@ export const ServicesAndRates: React.FC = () => {
           ))}
         </div>
 
-        {/* Notice on Custom Group Logistics */}
         <div className="mt-12 p-6 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h4 className="text-sm font-bold text-stone-900">

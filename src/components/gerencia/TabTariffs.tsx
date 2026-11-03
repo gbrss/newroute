@@ -3,6 +3,9 @@ import { Plus, Edit, Trash2 } from 'lucide-react';
 import { ServiceTariff } from '../../types';
 import { formatCLP } from '../../lib/storage';
 
+// IMPORTAMOS LA IMAGEN POR DEFECTO
+import defaultServiceImg from '../../assets/images/defaultService.png';
+
 interface Props {
   tariffs: ServiceTariff[];
   handleOpenTariffModal: (tariff?: ServiceTariff) => void;
@@ -20,7 +23,12 @@ export const TabTariffs: React.FC<Props> = ({ tariffs, handleOpenTariffModal, ha
         {tariffs.map((t) => (
           <div key={t.id} className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-xs flex flex-col justify-between group transition-colors duration-300">
             <div>
-              {t.image && <img src={t.image} alt={t.name} className="w-full h-32 object-cover rounded-lg mb-3" />}
+              {/* AQUÍ USAMOS LA IMAGEN POR DEFECTO SI NO HAY IMAGEN */}
+              <img 
+                src={t.image || defaultServiceImg.src} 
+                alt={t.name} 
+                className="w-full h-32 object-cover rounded-lg mb-3" 
+              />
               <h4 className="font-bold text-sm font-display pr-2 text-stone-900 dark:text-white">{t.name}</h4>
               <p className="text-stone-500 dark:text-stone-400 text-[11px] mt-1">{t.subtitle}</p>
               <span className="inline-block mt-2 font-mono text-[10px] bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded uppercase text-stone-600 dark:text-stone-300">{t.category}</span>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ImageKit from 'imagekit-javascript';
 import { BookingRequest, ContactMessage, ServiceTariff, BookingStatus } from '../../types';
 import {
+  getStoredBookings, getStoredContacts, getStoredTariffs,
   updateBookingStatus, deleteBooking, markContactRead, deleteContactMessage,
-  exportBookingsToCSV, getStoredTariffs, saveTariff, deleteTariff
+  exportBookingsToCSV, saveTariff, deleteTariff
 } from '../../lib/storage';
 
-// Importación de los componentes
 import { GerenciaLogin } from '../gerencia/GerenciaLogin';
 import { GerenciaHeader } from '../gerencia/GerenciaHeader';
 import { GerenciaKpis } from '../gerencia/GerenciaKpis';
@@ -24,8 +24,6 @@ interface GerenciaPageProps {
 }
 
 const AUTH_STORAGE_KEY = 'newroute_gerencia_session_v1';
-const BOOKINGS_STORAGE_KEY = 'newroute_bookings_v1';
-const CONTACTS_STORAGE_KEY = 'newroute_contacts_v1';
 
 export const GerenciaPage: React.FC<GerenciaPageProps> = ({
   bookings: initialBookings,
@@ -88,29 +86,22 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
     const saved = sessionStorage.getItem(AUTH_STORAGE_KEY);
     if (saved === 'active') setIsAuthenticated(true);
 
-    try {
-      const storedBookings = localStorage.getItem(BOOKINGS_STORAGE_KEY);
-      const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY);
-      if (storedBookings) setBookings(JSON.parse(storedBookings));
-      if (storedContacts) setContacts(JSON.parse(storedContacts));
-      setTariffs(getStoredTariffs());
-    } catch (e) { console.error(e); }
-  }, []);
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === BOOKINGS_STORAGE_KEY || e.key === CONTACTS_STORAGE_KEY) refreshData();
-      if (e.key === 'newroute_tariffs_v1') setTariffs(getStoredTariffs());
+    const loadData = async () => {
+      const savedBookings = await getStoredBookings();
+      const savedContacts = await getStoredContacts();
+      const savedTariffs = await getStoredTariffs();
+      setBookings(savedBookings);
+      setContacts(savedContacts);
+      setTariffs(savedTariffs);
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    loadData();
   }, []);
 
   useEffect(() => {
-    const handleBookingCreated = () => {
-      refreshData();
+    const handleBookingCreated = async () => {
+      await refreshData();
       try {
-        const stored = JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY) || '[]');
+        const stored = await getStoredBookings();
         if (stored.length > 0) {
           const latest = stored[0];
           setSelectedBooking(latest);
@@ -124,13 +115,11 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
     return () => window.removeEventListener('booking-created', handleBookingCreated);
   }, []);
 
-  const refreshData = () => {
-    try {
-      const storedBookings = localStorage.getItem(BOOKINGS_STORAGE_KEY);
-      const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY);
-      if (storedBookings) setBookings(JSON.parse(storedBookings));
-      if (storedContacts) setContacts(JSON.parse(storedContacts));
-    } catch (e) { console.error(e); }
+  const refreshData = async () => {
+    const b = await getStoredBookings();
+    const c = await getStoredContacts();
+    setBookings(b);
+    setContacts(c);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -227,7 +216,7 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
     }
   };
 
-  const handleSaveTariff = (e: React.FormEvent) => {
+  const handleSaveTariff = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tariffForm.name || !tariffForm.id) return;
 
@@ -235,24 +224,43 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
       ? (tariffForm.highlights as string).split(',').map(s => s.trim())
       : tariffForm.highlights || [];
 
-    const finalTariff = { ...tariffForm, highlights: highlightsArray } as ServiceTariff;
-    const updated = saveTariff(finalTariff, !!editingTariff);
-    if (updated) {
-      setTariffs(updated);
-      window.dispatchEvent(new Event('tariffs-updated'));
-    }
+    // Aseguramos que todos los campos tengan un valor válido (string o número)
+    const finalTariff: ServiceTariff = {
+      id: tariffForm.id,
+      category: tariffForm.category || 'aeropuerto',
+      name: tariffForm.name,
+      subtitle: tariffForm.subtitle || '',
+      description: tariffForm.description || '',
+      price1to3: Number(tariffForm.price1to3) || 0,
+      price4to6: Number(tariffForm.price4to6) || 0,
+      price7plus: tariffForm.price7plus ? Number(tariffForm.price7plus) : undefined,
+      durationApprox: tariffForm.durationApprox || '',
+      image: tariffForm.image || '',
+      featured: tariffForm.featured || false,
+      highlights: highlightsArray,
+    };
     
-    setIsTariffModalOpen(false);
-    setEditingTariff(null);
+    try {
+      await saveTariff(finalTariff, !!editingTariff);
+      
+      const updatedTariffs = await getStoredTariffs();
+      setTariffs(updatedTariffs);
+      window.dispatchEvent(new Event('tariffs-updated'));
+      
+      setIsTariffModalOpen(false);
+      setEditingTariff(null);
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message || "Error al guardar el servicio en la base de datos.");
+    }
   };
 
-  const handleDeleteTariff = (id: string) => {
+  const handleDeleteTariff = async (id: string) => {
     if (window.confirm('¿Eliminar este servicio?')) {
-      const updated = deleteTariff(id);
-      if (updated) {
-        setTariffs(updated);
-        window.dispatchEvent(new Event('tariffs-updated'));
-      }
+      await deleteTariff(id);
+      const updatedTariffs = await getStoredTariffs();
+      setTariffs(updatedTariffs);
+      window.dispatchEvent(new Event('tariffs-updated'));
     }
   };
 
@@ -274,28 +282,38 @@ export const GerenciaPage: React.FC<GerenciaPageProps> = ({
     setSelectedBooking(b); setDriverInput(b.assignedDriver || ''); setNotesInput(b.adminNotes || '');
   };
 
-  const handleUpdateStatus = (id: string, newStatus: BookingStatus) => {
-    updateBookingStatus(id, newStatus, notesInput, driverInput); refreshData();
+  const handleUpdateStatus = async (id: string, newStatus: BookingStatus) => {
+    await updateBookingStatus(id, newStatus, notesInput, driverInput); 
+    await refreshData();
     if (selectedBooking?.id === id) setSelectedBooking({ ...selectedBooking, status: newStatus, assignedDriver: driverInput, adminNotes: notesInput });
   };
 
-  const handleSaveNotes = () => {
+  const handleSaveNotes = async () => {
     if (!selectedBooking) return;
-    updateBookingStatus(selectedBooking.id, selectedBooking.status, notesInput, driverInput);
-    alert('Asignación guardada.'); refreshData();
+    await updateBookingStatus(selectedBooking.id, selectedBooking.status, notesInput, driverInput);
+    alert('Asignación guardada.'); 
+    await refreshData();
     setSelectedBooking({ ...selectedBooking, assignedDriver: driverInput, adminNotes: notesInput });
   };
 
-  const handleDeleteBooking = (id: string) => {
-    if (window.confirm('¿Eliminar reserva?')) { deleteBooking(id); setSelectedBooking(null); refreshData(); }
+  const handleDeleteBooking = async (id: string) => {
+    if (window.confirm('¿Eliminar reserva?')) { 
+      await deleteBooking(id); 
+      setSelectedBooking(null); 
+      await refreshData(); 
+    }
   };
 
-  const handleDeleteContact = (id: string) => {
-    if (window.confirm('¿Eliminar mensaje?')) { deleteContactMessage(id); refreshData(); }
+  const handleDeleteContact = async (id: string) => {
+    if (window.confirm('¿Eliminar mensaje?')) { 
+      await deleteContactMessage(id); 
+      await refreshData(); 
+    }
   };
 
-  const handleToggleContactRead = (id: string, currentRead: boolean) => {
-    markContactRead(id, !currentRead); refreshData();
+  const handleToggleContactRead = async (id: string, currentRead: boolean) => {
+    await markContactRead(id, !currentRead); 
+    await refreshData();
   };
 
   const getStatusBadge = (status: BookingStatus) => {

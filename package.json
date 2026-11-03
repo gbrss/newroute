@@ -15,6 +15,7 @@
     "@google/genai": "^2.4.0",
     "@imagekit/astro": "^1.0.3",
     "@imagekit/react": "^5.0.3",
+    "@libsql/client": "^0.18.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.1.1",
     "astro": "^7.4.4",

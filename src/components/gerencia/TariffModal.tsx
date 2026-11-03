@@ -29,21 +29,42 @@ export const TariffModal: React.FC<Props> = ({
         </div>
         <form onSubmit={handleSaveTariff} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Nombre *</label><input type="text" required value={tariffForm.name || ''} onChange={e => setTariffForm({...tariffForm, name: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-            <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Subtítulo</label><input type="text" value={tariffForm.subtitle || ''} onChange={e => setTariffForm({...tariffForm, subtitle: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
-            <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Categoría</label><select value={tariffForm.category || 'aeropuerto'} onChange={e => setTariffForm({...tariffForm, category: e.target.value as ServiceCategory})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors"><option value="aeropuerto">Aeropuerto</option><option value="vinos">Vinos</option><option value="ski">Ski</option><option value="termas">Termas</option><option value="city_tour">City Tour</option></select></div>
-            <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Duración</label><input type="text" placeholder="Ej: 7 horas" value={tariffForm.durationApprox || ''} onChange={e => setTariffForm({...tariffForm, durationApprox: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
+            <div>
+              <label className="block text-xs font-bold mb-1 dark:text-stone-300">Nombre *</label>
+              <input type="text" required value={tariffForm.name || ''} onChange={e => setTariffForm({...tariffForm, name: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 dark:text-stone-300">Subtítulo</label>
+              <input type="text" value={tariffForm.subtitle || ''} onChange={e => setTariffForm({...tariffForm, subtitle: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 dark:text-stone-300">Categoría</label>
+              <select value={tariffForm.category || 'aeropuerto'} onChange={e => setTariffForm({...tariffForm, category: e.target.value as ServiceCategory})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors">
+                <option value="aeropuerto">Aeropuerto</option>
+                <option value="vinos">Vinos</option>
+                <option value="ski">Ski</option>
+                <option value="termas">Termas</option>
+                <option value="city_tour">City Tour</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 dark:text-stone-300">Duración</label>
+              <input type="text" placeholder="Ej: 7 horas" value={tariffForm.durationApprox || ''} onChange={e => setTariffForm({...tariffForm, durationApprox: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+            </div>
           </div>
-          <div><label className="block text-xs font-bold mb-1 dark:text-stone-300">Descripción</label><textarea rows={2} value={tariffForm.description || ''} onChange={e => setTariffForm({...tariffForm, description: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" /></div>
+          <div>
+            <label className="block text-xs font-bold mb-1 dark:text-stone-300">Descripción</label>
+            <textarea rows={2} value={tariffForm.description || ''} onChange={e => setTariffForm({...tariffForm, description: e.target.value})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+          </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 1-3 PAX</label>
-              <input type="number" required value={tariffForm.price1to3 || 0} onChange={e => handlePrice1to3Change(parseInt(e.target.value) || 0)} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+              <input type="number" required value={tariffForm.price1to3 || ''} onChange={e => handlePrice1to3Change(parseInt(e.target.value) || 0)} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 4-6 PAX</label>
-              <input type="number" required value={tariffForm.price4to6 || 0} onChange={e => setTariffForm({...tariffForm, price4to6: parseInt(e.target.value)})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
+              <input type="number" required value={tariffForm.price4to6 || ''} onChange={e => setTariffForm({...tariffForm, price4to6: parseInt(e.target.value)})} className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg p-2 text-xs text-stone-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-bold mb-1 dark:text-stone-300">Precio 7+ PAX (VIP)</label>
